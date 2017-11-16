@@ -24,6 +24,7 @@
 ]
 \newif\if@qom@print
 \newif\if@qom@index
+\newif\if@qom@debug
 \newcount\qom@thesistype
 \newcount\qom@thesis@supervisor
 \newcount\qom@thesis@advisor
@@ -39,6 +40,7 @@
 \DeclareOption{master}{\qom@thesistype=\@ne\relax}
 \DeclareOption{bachelor}{\qom@thesistype=\tw@\relax}
 \DeclareOption{index}{\@qom@indextrue}%
+\DeclareOption{debug}{\@qom@debugtrue}%
 \ProcessOptions\relax
 \LoadClass[a4paper,12pt,openany, oneside]{book}
 \RequirePackage{keyval}
@@ -180,85 +182,322 @@
   \ifx\@tmpa\@relax%
   \else\expandafter\@striprank\@rank\fi%
 }%
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+\hbox{}
+\vspace*{\fill}
+\begin{center}
+%این صفحه، عمداً خالی گذاشته شده است.
+\end{center}
+\vspace{\fill}
+\thispagestyle{empty}
+\newpage
+\if@twocolumn\hbox{}\newpage\fi\fi\fi}
 %%%%%%%%%  Packages  %%%%%%%%%%%%%%%%%
+%
+%\RequirePackage[immediate]{silence}
+%\WarningFilter{latex}{Underfull}
+%\WarningFilter{latex}{Overfull}
+%\WarningFilter{latex}{LaTeX}
+%\WarningsOff[Fancyhdr,fancyhdr, hyperref] 
+%\ActivateWarningFilters
+%\SafeMode
 %-------------------------------------------------------------------------------------------------------------------
-% در ورژن جدید زی‌پرشین برای تایپ متن‌های ریاضی، این سه بسته، حتماً باید فراخوانی شود
-\RequirePackage{amsmath}
-\RequirePackage{amsthm}
-\RequirePackage{amssymb}
+% در ورژن جدید زی‌پرشین برای تایپ متن‌های ریاضی، این سه بسته، حتماً باید فراخوانی شود؛‌ این بسته‌ها در صورت نیاز کاربر به متن افزوده خواهد شد. 
+%\RequirePackage{amsmath}
+%\RequirePackage{amsthm}
+%\RequirePackage{amssymb}
+\RequirePackage{biditools}
 % بسته‌ای برای تنطیم حاشیه‌های بالا، پایین، چپ و راست صفحه
-\RequirePackage[top=25mm, bottom=25mm, left=25mm, right=35mm]{geometry}
+\RequirePackage[top=35mm, bottom=35mm, left=30mm, right=40mm, 
+        bindingoffset=0mm]{geometry}
 %
 \RequirePackage{graphicx}
 \graphicspath{{images/}}
 %
 \RequirePackage[]{xcolor}
 \RequirePackage{bidi-atbegshi}
+\if@qom@debug
+    \RequirePackage{picture}
+\fi
 %
 \RequirePackage{array}
 \newcolumntype{C}[1]{>{\raggedleft\centering\arraybackslash}p{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
 \newcolumntype{M}[1]{>{\raggedleft\centering\arraybackslash}m{#1}}
 %
-\RequirePackage{enumitem}
+\RequirePackage[inline]{enumitem}
+\setlist{noitemsep}
 \RequirePackage{tabularx}
 \RequirePackage{booktabs}
 %
 \RequirePackage{emptypage}
+\RequirePackage{setspace}
 %
 \RequirePackage{fancyhdr}
-% بسته‌ای برای ظاهر شدن «مراجع»  در فهرست مطالب
-\RequirePackage[nottoc]{tocbibind}
-
+% بسته‌ای برای ظاهر شدن «مراجع»  در فهرست مطالب 
+%nottoc Disables the inclusion of the ToC.
+%notlot Disables the inclusion of the List of Tables.
+%notlof Disables the inclusion of the List of Figures.
+\RequirePackage[nottoc,notlot,notlof]{tocbibind}
+% This option make preparation for making index in the document
 \if@qom@index
     \PassOptionsToPackage{quickindex-variant2}{xepersian}%
     \RequirePackage{makeidx}%
     \makeindex%
 \fi    
-
+\RequirePackage{tikz}
+\RequirePackage{apptools}
+%%%%% The hyperref package should be the last package before xepersian package. 
+\if@qom@print
+    \PassOptionsToPackage{monocolor, hyperref}{xcolor}
+    \RequirePackage[hidelinks=true]{hyperref}
+\else
+    \PassOptionsToPackage{hyperref}{xcolor}
+    \RequirePackage[
+    colorlinks=true, %% به جای استفاده از مربع قرمز دور موارد ارجاعی از لینک های رنگی استفاده کند.
+    linkcolor=red, anchorcolor=green, citecolor=magenta, urlcolor=cyan, filecolor=magenta, %% رنگ برخی از لینک ها . 
+    ]{hyperref}
+\fi    
+%% در این قسمت تنظیمات بسته hyperref را قرار می دهیم.
+%% این تنظیمات شامل موارد زیر است.
+\hypersetup{
+%% موقعی که فایل پی دی اف خروجی را باز می کنید صفحه به صورت عریض و بزرگ باز می شود.
+pdfmenubar=false, pdfstartview=FitH, 
+%% در قسمت مراجع شماره صفحه ای که به آن مرجع ارجاع داده است را وارد می کند،
+%% مواردی که برای فعال سازی این که شماره اشکال را به صورت ارجاعی نشان دهد
+pagebackref =true,hyperfigures=true,
+pdftoolbar=true
+bookmarksopen = true,
+bookmarksopenlevel = 1
+%%% اگر این option را true‌ بکنیم، آن‌گاه در کنار bookmark شماره فصل و بخش و زیربخش نیز می آید. مثلا می‌نویسد: ۱.۲ طراحی شبکه
+bookmarksnumbered = true
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % فراخوانی بسته زی‌پرشین و تعریف قلم فارسی و انگلیسی
-\RequirePackage{bidipoem}
-\RequirePackage{biditools}
+%\RequirePackage{bidipoem}
 \bidi@AtEndPreamble{%
-\RequirePackage[extrafootnotefeatures,]{xepersian}
-% See http://qa.parsilatex.com/7884 for details
-\if@bidi@csundef{@bidi@removefromreset}{}{%
-\@bidi@removefromreset{footnote}{chapter}%
-}
-%\settextfont[Language=Default,Scale=1.33,BoldFont={IRlotus}]{IRLotus} %scale adopted with respect to XB Zar font.
-\settextfont[Language=Default,Scale=1.2,]{XB Niloofar} %scale adopted with respect to XB Zar font.  
-\setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman}
-\paragraphfootnotes
-\setlength{\footmarkwidth}{0pt}
-%
-\setdigitfont[Scale=1]{Yas}
-% تعریف قلم‌های فارسی و انگلیسی اضافی برای استفاده در بعضی از قسمت‌های متن
-\defpersianfont\nastaliq[Language=Default,Scale=2.5,AutoFakeBold]{IranNastaliq}
-\defpersianfont\chapternumber[Language=Default,Scale=1.5,BoldFont={IRlotus}]{IRLotus}
-\defpersianfont\zarfont{XB Zar}
-\defpersianfont\titrfont{XB Titre}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%  با استفاده از این دستور می‌توان فونت و فارسی و یا انگلیسی بودن اعداد در فرمول‌ها را به حالت اولیه (یعنی پیش‌فرض لاتک) برگرداند.
-\DefaultMathsDigits
-%
-%\DeclareMathSizes{textsize}{mathsize}{scriptsize}{scriptscriptsize}
-% گزینه اول: این برای چه دسته فونتی است. پیش فرض استایل ما فونت 10pt است. 
-% گزینه دوم: اندازه فونت توابع و موجودات ریاضی درون متن.
-% گزینه سوم: برای اسکریپت ها، اندازه زیرنویس و بالانویس.
-% گزینه چهارم: برای زیرنویس زیرنویس.
+    \usepackage[para*]{manyfoot}
+    \SetFootnoteHook{\setLTR}
+    \DeclareNewFootnote[para]{A}
+    \RequirePackage[extrafootnotefeatures,]{xepersian}
+    % in case of Kashida=off option, because nastaliq font has no support for kashida and the code needs to know about that. 
+    \if@bidi@csundef{if@Kashida@on}{\newif\if@Kashida@on}{}
+    % See http://qa.parsilatex.com/7884 for details
+    \if@bidi@csundef{@bidi@removefromreset}{}{%
+        \@bidi@removefromreset{footnote}{chapter}%
+    }
+    %\settextfont[Language=Default,Scale=1.33,BoldFont={IRlotus}]{IRLotus} %scale adopted with respect to XB Zar font.
+    \settextfont[Language=Default,Scale=1.2,]{XB Niloofar} %scale adopted with respect to XB Zar font.  
+    \setdigitfont[Scale=1]{Yas}
+    %\setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%  The following code causes the english footnotes will be typeset in paragraph mode wile the perian one typeset in ordinary way. 
+    % بر گرفته از استایل مجله ریاضی و جامعه 
+    \let\c@footnoteA\c@footnote
+    \let\LTRfootnote\footnoteA
+    \renewcommand*{\@makefnmark}{\hbox{\@textsuperscript{\normalfont\@thefnmark}}}
+      \def\MFL@fnotepara#1#2#3{\let\@thefnmark\@empty
+        \NCC@makefnmark{\latinfont #2}%
+        \MFL@insert#1{\reset@font\footnotesize
+          \ifx\@thefnmark\@empty \@tempswafalse \else
+            \@tempswatrue
+            \protected@edef\@currentlabel{\@thefnmark}%
+          \fi
+          \color@begingroup
+            \if@tempswa
+              \setbox\@tempboxa\hbox{\@makefnmark}%
+              \ifMFL@paraindent
+                \@tempdima.8em \advance\@tempdima-\wd\@tempboxa
+                \ifdim \@tempdima<\z@ \@tempdima\z@ \fi
+              \else
+                \@tempdima\z@
+              \fi
+            \fi
+            \setbox\@tempboxa\hbox{%
+              \if@tempswa
+                \hskip\@tempdima\unhbox\@tempboxa\nobreak
+              \fi
+              \ignorespaces\resetlatinfont#3\unskip\strut
+              \ifMFL@split \penalty\m@ne\space \else
+                \penalty-10 \hskip\footglue
+              \fi
+            }%
+            \dp\@tempboxa\z@ \ht\@tempboxa\MFL@fudgefactor\wd\@tempboxa
+            \box\@tempboxa
+          \color@endgroup
+        }%
+      }
+    \long\def\@footnotetext#1{\insert\footins{%
+       \if@RTL@footnote\@RTLtrue\else\@RTLfalse\fi%
+        \reset@font\footnotesize%\tiny
+        \interlinepenalty\interfootnotelinepenalty
+        \splittopskip\footnotesep
+        \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+        \hsize\columnwidth \@parboxrestore
+        \protected@edef\@currentlabel{%
+           \csname p@footnote\endcsname\@thefnmark
+        }%
+        \color@begingroup
+          \@makefntext{%
+            \rule\z@\footnotesep\ignorespaces\if@RTL@footnote#1\else\latinfont#1\fi\@finalstrut\strutbox}%
+        \color@endgroup}}%
+    %\footdir@temp\footdir@my@ORG@xepersian@footnotetext\@footnotetext{\bidi@footdir@footnote}%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    \paragraphfootnotes
+    \setlength{\footmarkwidth}{0pt}
+    %
 
-% در دستورات زیر ما برای سه حالت، اندازه‌های مورد نظر را تعریف کرده ایم. 
-\DeclareMathSizes{10}{11}{9}{8}   % For size 10 text
-\DeclareMathSizes{11}{12}{11}{10}   % For size 11 text
-\DeclareMathSizes{12}{13}{12}{11}  % For size 12 text
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newsavebox\qom@thesis@proof@box
-\sbox{\qom@thesis@proof@box}{\textcolor{gray}{\tiny آماده‌ شده توسط کلاس \texttt{qom-thesis}، نسخهٔ \lr{\qom@thesis@version}}}
-\AtBeginShipout{\AtBeginShipoutLowerRight{%
-\put(0,\LengthToUnit{\ht\qom@thesis@proof@box}){\rotatebox{90}{\usebox\qom@thesis@proof@box}}%
-}}
-}
+    % تعریف قلم‌های فارسی و انگلیسی اضافی برای استفاده در بعضی از قسمت‌های متن
+    \defpersianfont\nastaliq[Language=Default,Scale=2.5,AutoFakeBold]{IranNastaliq}
+    \defpersianfont\chapternumber[Language=Default,Scale=1.5,BoldFont={IRlotus}]{IRLotus}
+    \defpersianfont\zarfont{XB Zar}
+    \defpersianfont\titrfont{XB Titre}
+    \defpersianfont\yasfont{Yas}
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%  با استفاده از این دستور می‌توان فونت و فارسی و یا انگلیسی بودن اعداد در فرمول‌ها را به حالت اولیه (یعنی پیش‌فرض لاتک) برگرداند.
+    %\DefaultMathsDigits
+    %
+    %\DeclareMathSizes{textsize}{mathsize}{scriptsize}{scriptscriptsize}
+    % گزینه اول: این برای چه دسته فونتی است. پیش فرض استایل ما فونت 10pt است. 
+    % گزینه دوم: اندازه فونت توابع و موجودات ریاضی درون متن.
+    % گزینه سوم: برای اسکریپت ها، اندازه زیرنویس و بالانویس.
+    % گزینه چهارم: برای زیرنویس زیرنویس.
+
+    % در دستورات زیر ما برای سه حالت، اندازه‌های مورد نظر را تعریف کرده ایم. 
+    \DeclareMathSizes{10}{11}{9}{8}   % For size 10 text
+    \DeclareMathSizes{11}{12}{11}{10}   % For size 11 text
+    \DeclareMathSizes{12}{13}{12}{11}  % For size 12 text
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \newsavebox\qom@thesis@proof@box
+    \sbox{\qom@thesis@proof@box}{\textcolor{gray}{\hboxR{\tiny آماده‌ شده توسط کلاس \texttt{qom-thesis}، نسخهٔ \lr{\qom@thesis@version}}}}
+    \newdimen\qom@thesis@proof@box@dim@ht
+    \newdimen\qom@thesis@proof@box@dim@wd
+    \qom@thesis@proof@box@dim@wd=\wd\qom@thesis@proof@box
+    \qom@thesis@proof@box@dim@ht=\ht\qom@thesis@proof@box
+    \AtBeginDocument{\AtBeginShipoutInit}%
+    \AtBeginShipout{\AtBeginShipoutLowerRight{%
+    % \put doesn't work properly in index pages!
+    %\put(0,\LengthToUnit{\ht\qom@thesis@proof@box}){\rotatebox{90}{\usebox\qom@thesis@proof@box}}% 
+    \begin{tikzpicture}[color=black,remember picture, overlay, every node/.style={inner sep=0pt},]
+        \node at (current page.south east) 
+        [anchor=north, xshift=-\qom@thesis@proof@box@dim@ht,yshift=\qom@thesis@proof@box@dim@wd+2] 
+        {\rotatebox{90}{\usebox\qom@thesis@proof@box}};
+    \end{tikzpicture}
+    }}
+    \bidi@patchcmd{\@Abjad}{آ}{الف}
+    {\typeout{Succeeded in changing `آ` into `الف`}}
+    {\typeout{Failed in changing `آ` into `الف`}}
+    \bidi@patchcmd{\@Abjad}{ه}{هـ}
+    {\typeout{Succeeded in changing `ه` into `هـ`}}
+    {\typeout{Failed in changing `ه` into `هـ`}}
+    \bidi@patchcmd{\@harfi}{آ}{\hbox{الف}}
+    {\typeout{Succeeded in changing `آ` into `الف`}}
+    {\typeout{Failed in changing `آ` into `الف`}}
+    \bidi@patchcmd{\@harfi}{ه}{هـ}
+    {\typeout{Succeeded in changing `ه` into `هـ`}}
+    {\typeout{Failed in changing `ه` into `هـ`}}
+    \PersianAlphs
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %% The following code is gotten from xepersian.sty, it set the baselineskip automaticly for persian fonts. 
+    \newcount\qom@tcl
+    \newdimen\qom@ilg
+    \newdimen\qom@strutilg
+    \chardef\f@ur=4
+    \newcommand*{\qom@computeautoilg}{% compute the interline glue
+     \qom@tcl=1536\qom@ilg\z@\qom@strutilg\z@
+     \loop
+     \iffontchar\font\qom@tcl
+     \ifdim\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl>\z@
+     \ifdim\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl>\qom@ilg
+       \qom@ilg=\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl
+     \fi
+     \else
+     \ifdim\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl<\z@
+      \ifdim-\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl>\qom@ilg
+       \qom@ilg=-\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl
+     \fi
+     \fi
+     \fi
+     \ifdim\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl>\z@
+     \ifdim\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl>\qom@strutilg
+       \qom@strutilg=\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl
+     \fi
+     \else
+     \ifdim\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl<\z@
+      \ifdim-\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl>\qom@strutilg
+       \qom@strutilg=-\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl
+     \fi
+     \fi
+     \fi
+     \fi
+     \advance\qom@tcl\@ne
+     \ifnum\qom@tcl<1792\repeat
+     \advance\qom@strutilg\qom@ilg
+    }
+
+    \bidi@patchcmd{\set@fontsize}{%
+    \baselineskip\f@baselineskip\relax
+    }{%
+    \baselineskip\f@baselineskip\relax
+    \qom@computeautoilg
+     \ifdim\qom@strutilg>\baselineskip
+      \PackageInfo{xepersian}{character with height+depth greater than current baselineskip found in font}%
+      \PackageInfo{xepersian}{baselineskip changed to that height+depth!}%
+      \baselineskip\qom@strutilg
+      \ifdim\footnotesep=.7\baselineskip
+      \else
+        \footnotesep.7\baselineskip
+      \fi
+     \fi
+    }{}{}    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
+    \if@bidi@csundef{bidi@digits}{% 
+        \newcount\bidi@digits
+        \XeTeXinterchartokenstate=\@ne
+        \newXeTeXintercharclass\bidi@digits@charclass
+        \bidi@digits=`\0 \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\9 \advance\bidi@digits \@ne \repeat
+        \bidi@digits=`\۰ \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\۹ \advance\bidi@digits \@ne \repeat
+    }{}
+    \newXeTeXintercharclass\qom@leftparen@charclass
+    \newXeTeXintercharclass\qom@rightparen@charclass
+    \XeTeXcharclass `\( \qom@leftparen@charclass
+    \XeTeXcharclass `\) \qom@rightparen@charclass
+    \XeTeXcharclass `\[ \qom@leftparen@charclass
+    \XeTeXcharclass `\] \qom@rightparen@charclass
+    \ifdim\the\XeTeXversion\XeTeXrevision\p@>0.99993\p@
+      \chardef\qom@alloc@intercharclass@top=4095
+    \else
+      \chardef\qom@alloc@intercharclass@top=255
+    \fi
+    \XeTeXinterchartoks \qom@alloc@intercharclass@top \bidi@digits@charclass = {\BeginSwitchDigitFont}
+    \XeTeXinterchartoks \bidi@digits@charclass \qom@alloc@intercharclass@top = {\EndSwitchDigitFont}
+    \XeTeXinterchartoks \qom@leftparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
+    \XeTeXinterchartoks \bidi@digits@charclass \qom@rightparen@charclass = {\EndSwitchDigitFont}
+    \if@bidi@csundef{if@nonlatin}{%
+        \newcommand*{\BeginSwitchDigitFont}{\if@Latin\else\yasfont \fi}
+        \newcommand*{\EndSwitchDigitFont}{\if@Latin\else\setpersianfont \fi}
+    }{%
+        \newcommand*{\BeginSwitchDigitFont}{\if@nonlatin\yasfont \fi}
+        \newcommand*{\EndSwitchDigitFont}{\if@nonlatin\setpersianfont \fi}
+    }
+    \if@qom@debug
+    \AtBeginShipout{%
+      \AtBeginShipoutUpperRight{%
+        {\color{red}%
+        \put(\dimexpr 1in+\oddsidemargin,
+             -\dimexpr 1in+\topmargin+\headheight+\headsep+\topskip)%
+          {%
+           \vtop to\dimexpr\vsize+\baselineskip{
+             \hrule
+             \leaders\vbox to\baselineskip{\hrule width\hsize\vfill}\vfill
+           }%
+          }%
+      }}%
+    }
+    \fi
+} %%%%%%%%%%%%%%%%%%% end of  \bidi@AtEndPreamble %%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 \def\@excellent{عالی}
 \def\@verygood{بسیار خوب}
@@ -283,7 +522,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\pagetitle#1{%
 \vspace*{5cm}
-{\nastaliq #1}
+\begingroup\if@Kashida@on\KashidaOff\fi
+\nastaliq #1
+\endgroup
 \vspace*{2cm}\par
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -295,16 +536,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\oathpage{%  تعهدنامه اصالت پایان‌نامه/رساله
 \begin{preamblepage}
+    \baselineskip=.76cm
     \begin{center}
-        {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{qomlogo}\\  دانشگاه قم}\\
+        \setlength{\baselineskip}{.7\baselineskip}
+        {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\  دانشگاه قم}\\
         {\bfseries\titrfont
         مدیریت تحصیلات تکمیلی\\
         «تعهدنامه اصالت \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi»}
     \end{center}
+    \vspace{-\baselineskip}
     \rule{\textwidth}{1mm}\vspace{-\baselineskip}\\[2pt]
     \rule{\textwidth}{1pt}
 
-    \baselineskip=.76cm
+    
 
     \noindent 
     اینجانب آقای/خانم: 
@@ -312,7 +556,6 @@
     دانشجوی مقطع 
     {کارشناسی ارشد}\ifnum\qom@thesistype=1\rlap{\checkmark}\fi$\bigcirc$ %\hskip 10pt
     {دکتری}\ifnum\qom@thesistype=0\rlap{\checkmark}\fi$\bigcirc$ %\hskip 10pt 
-
     به شماره دانشجویی 
     {\ifx\@student@id\undefined\qom@dotline{۹۶ ۱۲۱۴۱۰۱۸}\else\bfseries\@student@id\fi{} }
     رشته
@@ -320,7 +563,7 @@
     {\ifx\@field\undefined\else گرایش \bfseries\@field\fi }
     که در تاریخ 
     {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\@defensedate\fi{} }
-    از \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi{} خود تحت عنوان:\\
+    از \Thesis{}  خود تحت عنوان:\\
     \centerline{\ifx\@title@persian\undefined\qom@dotlined{7cm}\else\bfseries«\@title@persian»\fi}
     با کسب نمره  با عدد: 
     {\ifx\@grade\undefined\qom@dotline{۱۹/۲۵}\else\bfseries\@grade\fi{} }
@@ -331,64 +574,68 @@
      دفاع نموده‌ام، بدین وسیله متعهد می‌شوم که:
      \begin{enumerate}[label=\arabic*-]
         \item 
-        این \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi{} حاصل تحقیق و پژوهش انجام شده توسط اینجانب بوده و در مواردی که از دستاوردهای 
+        این \Thesis{} حاصل تحقیق و پژوهش انجام شده توسط اینجانب بوده و در مواردی که از دستاوردهای 
         علمی و پژوهشی دیگران اعم از پایان‌نامه، کتاب، مقاله، \ldots استفاده نموده‌ام،   مطابق ضوابط و رویه  موجود، نام منبع مورد استفاده و سایر مشخصات 
         آن را در فهرست مربوطه ذکر و درج کرده‌ام. 
         \item 
-        این \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi{} قبلاً برای هیچ مدرک تحصیلی هم سطح، پایین‌تر یا بالاتر در سایر \linebreak 
+        این \Thesis{} قبلاً برای هیچ مدرک تحصیلی هم سطح، پایین‌تر یا بالاتر در سایر \linebreak 
         دانشگاه‌ها و مؤسسات آموزش عالی ارائه نشده است. 
         \item 
         چنانچه بعد از فراغت از تحصیل،‌ قصد استفاده و هرگونه بهره‌برداری اعم از چاپ کتاب، ثبت اختراع و \ldots 
-        از این \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi{} را داشته باشم، از حوزه معاونت پژوهشی واحد مجوزهای مربوطه را اخذ نمایم. 
+        از این \Thesis{} را داشته باشم، از حوزه معاونت پژوهشی واحد مجوزهای مربوطه را اخذ نمایم. 
         \item 
         چنانچه در هر مقطع زمانی خلاف موارد فوق ثابت شود، عواقب ناشی از آن را می‌پذیرم  و واحد دانشگاه قم مجاز است با اینجانب مطابق ضوابط و مقررات 
         رفتار نموده و در صورت ابطال مدرک تحصیلی‌ام هیچگونه ادعایی نخواهم داشت. 
      \end{enumerate}
 
-    \setLTRtable     
-     \begin{tabularx}{\textwidth}{XX}
-     \begin{flushleft}
-     \bfseries
-     {\makebox[5cm]{نام و نام‌خانوادگی متعهد:}}\\
-     {\makebox[5cm]{\scriptsize تاریخ و امضاء}}
-     \end{flushleft}
-     &
-     \begin{flushright}
-     \bfseries
-     \makebox[7cm]{صحت امضای دانشجو مورد تایید است.}\\
-     \makebox[7cm]{نماینده تحصیلات تکمیلی}\\
-     \makebox[7cm]{نام و نام‌خانوادگی: \ldots\ldots\ldots}\\
-     \makebox[7cm]{\scriptsize تاریخ و امضاء}
-     \end{flushright}\\
+    \vfill
+    \begin{footnotesize}
+    \bfseries
+     \begin{tabularx}{\textwidth}{@{\hskip 1cm}c@{\hskip 2.5cm}c}
+     صحت امضای دانشجو مورد تایید است. & نام و نام‌خانوادگی متعهد: \\ 
+     نماینده تحصیلات تکمیلی & {\scriptsize تاریخ و امضاء} \\
+     نام و نام‌خانوادگی: \ldots\ldots\ldots  & \\
+     {\scriptsize تاریخ و امضاء} & \\
      \end{tabularx}
+     \end{footnotesize}
+     \vfill\null
 \end{preamblepage}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newsavebox\@too@box@wd
+\def\@too#1{%
+    \sbox\@too@box@wd{#1}%
+    \makebox[\wd\@too@box@wd][c]{"}%
+}
 \newcommand\refereeAck{%
 \begin{preamblepage}
-    \baselineskip=.76cm
+    \small
+    \baselineskip=.7cm
 %    \parindent=\z@
-    \begin{center}
-    {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{qomlogo} %\\  دانشگاه قم\\
-    }\\%[5pt]
-    {\titrfont\bfseries «صورت جلسه دفاع از \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi»}
-    \end{center}
-    
+%    \begin{center}
+    \begingroup
+    \centerline{\zarfont%\fontsize{12}{14}\selectfont
+    \includegraphics[width=2cm, height=2cm]{logo} %\\  دانشگاه قم\\
+    }%\par%[5pt]
+    \centerline{\titrfont\bfseries «صورت جلسه دفاع از \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi»}
+    \endgroup
+%    \end{center}
+
     {\bfseries با تأييدات خداوند متعال و با استعانت از حضرت ولی عصر}
      {\small (عجل الله تعالی فرجه الشريف)}
+     
      
      جلسه دفاعیه \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi{} خانم/آقای{}
          {\ifx\@author@persian\undefined\qom@dotlined{4cm}\else\bfseries\@author@persian\fi} 
      رشته 
         {\ifx\@major\undefined\qom@dotline{مهندسی کامپیوتر}\else\bfseries\@major\fi}
-     
      تحت عنوان 
      {\ifx\@title@persian\undefined\qom@dotlined{9cm}\else\bfseries\@title@persian\fi}
      با حضور هیأت داوران در محل دانشگاه قم در تاریخ 
     {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\@defensedate\fi{} }
      تشکیل گردید. 
      
-     در این جلسه، \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi{} با نمره (به عدد  
+     در این جلسه، \Thesis{} با نمره (به عدد  
      {\bfseries\ifx\@grade\undefined\ldots\ldots\ldots\else\@grade\fi}{،}
       به حروف
       {\bfseries\ifx\@grade@letters\undefined\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\else\@grade@letters\fi})    و \linebreak
@@ -401,55 +648,81 @@
         قابل~قبول~%
         \ifx\@degree\@acceptable\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt مورد دفاع قرار گرفت. 
         
-    \vspace{5mm}
+    \vskip 5pt
+%        \smallskip
+%    \vspace{5mm}
     %\begin{tabular}{|@{}R{5.2cm}|C{5.2cm}|C{3cm}|C{3cm}@{}|}
-    \def\@nextrow{\\[20pt]}
-    \begin{tabularx}{\textwidth}{|R{4.2cm}@{}|C{4.2cm}|C{2cm}|C{3.3cm}@{}|}
-    %{rX@{}c@{}c@{}}
+    \def\@nextrow{\\[10pt]}
+    \begin{tabularx}{\textwidth}%{|R{4.2cm}@{}|C{4.2cm}|C{2cm}|C{3.3cm}@{}|}
+    {|@{\hskip 3pt}p{4cm}@{\hskip 3pt}|@{\hskip 2pt}c@{\hskip 2pt}|@{}c@{}|@{}X@{}|}
     \toprule
-    \multicolumn{1}{|c|}{\titrfont\small عـــنـــوان} &
-    \multicolumn{1}{c|}{\titrfont\small نام و نام‌خانوادگی}  &
+    \multicolumn{1}{|c|}{\titrfont\small نام و نام‌خانوادگی}  &
+    \multicolumn{1}{c|}{\titrfont\small سمت} &
     \multicolumn{1}{c|}{\titrfont\small مرتبه علمی}  &
     \multicolumn{1}{c|}{\titrfont\small امضاء}
      \\[5pt]
     \toprule\toprule
-    \ifnum\qom@thesis@supervisor>\z@\ifcase\qom@thesis@supervisor\or{استاد}\or{استادان}\fi\ راهنما:  & 
-    \@first@supervisor@name@persian & \@first@supervisor@rank@persian & \@nextrow
-    \ifnum\qom@thesis@supervisor=\tw@ &\@second@supervisor@name@persian & \@second@supervisor@rank@persian & \@nextrow\fi\fi
+%    &&&\\
+    \ifnum\qom@thesis@supervisor>\z@ 
+    \@first@supervisor@name@persian & 
+    \ifcase\qom@thesis@supervisor\or استاد راهنما\or استاد راهنمای اوّل\fi  & 
+     \@first@supervisor@rank@persian & \@nextrow
+    \ifnum\qom@thesis@supervisor=\tw@ 
+    \@second@supervisor@name@persian & 
+    \@too{استاد} \@too{راهنمای}  
+     دوّم  & 
+     \@second@supervisor@rank@persian & \@nextrow\fi
+    \fi
 
-    \ifnum\qom@thesis@advisor>\z@\ifcase\qom@thesis@advisor\or{استاد}\or{استادان}\fi\ مشاور:  & 
-    \@first@advisor@name@persian & \@first@advisor@rank@persian &  \@nextrow
-    \ifnum\qom@thesis@advisor=\tw@ &\@second@advisor@name@persian &  \@second@advisor@rank@persian &\@nextrow\fi\fi
+    \ifnum\qom@thesis@advisor>\z@
+    \@first@advisor@name@persian & 
+    \ifcase\qom@thesis@advisor\or{ استاد مشاور}\or{استاد مشاور اوّل}\fi  & 
+    \@first@advisor@rank@persian & \@nextrow
+    \ifnum\qom@thesis@advisor=\tw@ 
+    \@second@advisor@name@persian &
+    \@too{استاد} \@too{مشاور}  
+    دوّم &  
+    \@second@advisor@rank@persian &\@nextrow\fi\fi
 
-    \ifnum\qom@thesis@referee@enternal>\z@\ifcase\qom@thesis@referee@enternal\or{استاد}\or{استادان}\fi\ داور داخلی:  & 
-    \@first@referee@name  &  \@first@referee@rank  &  \@nextrow
-    \ifnum\qom@thesis@referee@enternal=\tw@ &\@second@referee@name &  \@second@referee@rank  & \@nextrow\fi\fi
+    \ifnum\qom@thesis@referee@enternal>\z@
+    \@first@referee@name  & 
+    \ifcase\qom@thesis@referee@enternal\or{داور داخلی}\or{داور داخلی اوّل}\fi & 
+    \@first@referee@rank  &  \@nextrow
+    \ifnum\qom@thesis@referee@enternal=\tw@ 
+    \@second@referee@name & \@too{داور} \@too{داخلی}  
+    دوّم
+    &  \@second@referee@rank  & \@nextrow\fi\fi
 
-    \ifnum\qom@thesis@referee@external>\z@\ifcase\qom@thesis@referee@external\or{استاد}\or{استادان}\fi\ داور خارجی:  & 
-    \@first@referee@external@name & \@first@referee@external@rank &\@nextrow
-    \ifnum\qom@thesis@referee@external=\tw@ &\@second@referee@external@name & \@second@referee@external@rank & \@nextrow\fi\fi
+    \ifnum\qom@thesis@referee@external>\z@
+    \@first@referee@external@name &
+    \ifcase\qom@thesis@referee@external\or{داور خارجی}\or{داور خارجی اوّل}\fi & 
+     \@first@referee@external@rank &\@nextrow
+    \ifnum\qom@thesis@referee@external=\tw@
+     \@second@referee@external@name & \@too{داور} \@too{خارجی}  
+     دوّم 
+     &  \@second@referee@external@rank & \@nextrow\fi\fi
 
-    نماینده تحصیلات تکمیلی & 
-    \ifx\qom@graduate@repsentative@name\undefined\else\qom@graduate@repsentative@name\fi &
-    \ifx\qom@graduate@repsentative@rank\undefined\else\qom@graduate@repsentative@rank\fi &
-    \@nextrow
+    \ifx\qom@graduate@repsentative@name\undefined\else\qom@graduate@repsentative@name\fi &  
+     \parbox{4.1cm}{\centering استاد ناظر و \par نماینده تحصیلات تکمیلی}
+     & \ifx\qom@graduate@repsentative@rank\undefined\else\qom@graduate@repsentative@rank\fi &
+    \\
+%    & نماینده تحصیلات تکمیلی & & \\[5pt]
     \bottomrule
     \end{tabularx}
 
-        \vfill
+    \bigskip
+%        \vfill
         \begin{tabularx}{\textwidth}{XX}
             \begin{minipage}{.4\textwidth}
                 \centering
                 معاون آموزشی و پژوهشی دانشکده\\[5pt]
-                نام و امضاء \\[2cm]
-                    \null
+                نام و امضاء 
             \end{minipage} &
             \begin{minipage}{.4\textwidth}
                 \centering
                 مدیر آموزش و  تحصیلات تکمیلی \\[5pt]
-                نام و امضاء \\[2cm]
-                    \null
-            \end{minipage}
+                نام و امضاء 
+            \end{minipage}\\
         \end{tabularx}
         \vfill    
 \end{preamblepage}}
@@ -477,22 +750,22 @@
 %%%%%%%%%%%%%%% صفحه عنوان  %%%%%%%%%%%%%%%
 \begin{preamblepage}
     \begin{titlepage}
-    {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{qomlogo}\\ \bfseries دانشگاه قم}
-    \\[5pt]
+    {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\[-7pt] \bfseries دانشگاه قم}
+    \\[-5pt]
     {\zarfont\fontsize{12}{14}\selectfont\bfseries دانشکده 
     \ifx\@faculty\undefined\qom@dotline{علوم ریاضی}\else\@faculty\fi
-    \\[5pt] 
+    \\[-7pt] 
     گروه 
     \ifx\@department\undefined\qom@dotline{علوم کامپیوتر}\else\@department\fi}
-    \\[10pt] 
+    \\%[5pt] 
     %\par
     %\vspace{.3\baselineskip}
-    {\vskip 4ex
+    {\vskip 2ex
     \zarfont\fontsize{14}{16}\selectfont\bfseries
     \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی‌ارشد}\or{پروژه کارشناسی}\fi
     }
     %\vskip 2ex
-    \vskip 5pt
+%    \vskip 5pt
     \centerline{\zarfont\fontsize{12}{14}\selectfont\bfseries  رشته 
     {\ifx\@major\undefined\qom@dotline{مهندسی کامپیوتر}\else\bfseries\@major\fi}{}
     \ifx\@field\undefined\else گرایش \@field\fi}
@@ -575,12 +848,14 @@
 \begin{preamblepage}
     \ifx\@abstract@persian\undefined%
     \else
-        \pagetitle{چکیده}
+%        \pagetitle{چکیده}
+        \chapter*{چکیده}
         \begin{abstractcount}
             {\@abstract@persian}%
         \end{abstractcount}
         \vspace*{1cm}\par
-        {\noindent کلمات کلیدی: \ifx\@keywords@persian\undefined\else\bfseries\@keywords@persian{}\fi}
+        {\noindent {\bfseries کلمات کلیدی:}
+        \ifx\@keywords@persian\undefined\else\@keywords@persian{}\fi}
     \fi
 \end{preamblepage}
 %%%%%%%%%%%%%%% صفحه
@@ -605,7 +880,7 @@
 % دستوری برای تغییر نام کلمه «اثبات» به «برهان»
 \renewcommand\proofname{\textbf{برهان}}
 % دستوری برای تغییر نام کلمه «کتاب‌نامه» به «مراجع»
-\renewcommand{\bibname}{مراجع}
+\renewcommand{\bibname}{منابع و مآخذ}
 % دستوری برای تعریف واژه‌نامه انگلیسی به فارسی
 \newcommand\persiangloss[2]{#1\dotfill\lr{#2}\\}
 % دستوری برای تعریف واژه‌نامه فارسی به انگلیسی 
@@ -634,7 +909,9 @@
 \newtheorem{lemma}[definition]{لم}
 \newtheorem{proposition}[definition]{گزاره}
 \newtheorem{corollary}[definition]{نتیجه}
+\theoremstyle{remark}
 \newtheorem{remark}[definition]{ملاحظه}
+\newtheorem{point}[definition]{نکته}
 %%%%%%%%%%%%%%%%%%%%%%%%
 %\theoremstyle{plain}
 %\newtheorem{theorem}{قضیه}
@@ -649,27 +926,22 @@
 %\newtheorem{remark}{ملاحظه}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \AtBeginDocument{%
-\baselineskip=1cm
-\bidi@patchcmd{\@Abjad}{آ}{الف}
-{\typeout{Succeeded in changing `آ` into `الف`}}
-{\typeout{Failed in changing `آ` into `الف`}}
-\bidi@patchcmd{\@Abjad}{ه}{هـ}
-{\typeout{Succeeded in changing `ه` into `هـ`}}
-{\typeout{Failed in changing `ه` into `هـ`}}
-\bidi@patchcmd{\@harfi}{آ}{\hbox{الف}}
-{\typeout{Succeeded in changing `آ` into `الف`}}
-{\typeout{Failed in changing `آ` into `الف`}}
-\bidi@patchcmd{\@harfi}{ه}{هـ}
-{\typeout{Succeeded in changing `ه` into `هـ`}}
-{\typeout{Failed in changing `ه` into `هـ`}}
-\PersianAlphs
+% Sophisticated front matter page-numbering
+%\pagenumbering{roman}
+%\let\old@chapter\@chapter
+%\def\@chapter{%
+%    \ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi
+%  \old@chapter}
 %
+%\bidi@appto\chapter{%\typeout{@@@@@@@@@@\the\c@chapter @@@@@@@@@@@}
+%\ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi}
 \def\@makechapterhead#1{%
   \vspace*{50\p@}%
   {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi \normalfont
     \ifnum \c@secnumdepth >\m@ne
       \if@mainmatter
-        \huge\bfseries \@chapapp\space \expandafter\tartibinumeral\c@chapter
+        \huge\bfseries \@chapapp\space 
+        \ifappendix \abjad{chapter}\else \expandafter\tartibinumeral\c@chapter\fi
         \par\nobreak
         \vskip 20\p@
       \fi
@@ -677,6 +949,7 @@
     \interlinepenalty\@M
     \Huge \bfseries #1\par\nobreak
     \vskip 40\p@
+    \nobreak
 %    \thispagestyle{empty}
 %    \newpage
   }}
@@ -691,7 +964,8 @@
 %%    \newpage
   }}  
   \flushbottom
-  \bidi@appto{\appendix}{\addcontentsline{toc}{chapter}{پیوست‌ها}}
+  \bidi@appto{\appendix}{\addcontentsline{toc}{chapter}{پیوست‌ها}\appendixtrue}
+%  \bidi@epreto{\chapter}{\ifnum\c@chapter=0\mainmatter\fi}
     \setlength{\parindent}{1cm}
     \setlength{\parskip}{0pt}
 %
@@ -773,61 +1047,38 @@
 \llap{\tiny\global\advance\WordCount\@ne\textcolor{red}{}%{\the\WordCount}
 }}}% beginnig of abstractcount environment
 {\renewcommand*{\PrintWordCount}{}
-\ifnum\WordCount>333%
+\ifnum\WordCount>300%
 \par\null\vspace{5mm}
-\centerline{\color{red}\bfseries\if@RTL\zarfont "متن چکیده نباید بیش از ۳۳۳ کاراکتر باشد؛‌ لطفاً آن را ویرایش نمایید.``\else%
-``The Abstract cannot contain more than 333 words; Please modify it."\fi}
+\centerline{\color{red}\bfseries\if@RTL\zarfont "متن چکیده نباید بیش از ۳۰۰ کاراکتر باشد؛‌ لطفاً آن را ویرایش نمایید.``\else%
+``The Abstract cannot contain more than 300 words."\fi}
 \centerline{\color{gray}\bfseries\if@RTL\zarfont در حال حاضر متن چکیدهٔ شما حاوی \the\WordCount{} کلمه است!\else%
-Your abstract includes \the\WordCount{} words!\fi}%
+This one includes \the\WordCount{} words! Please modify it.\fi}%
 \fi
 }% end of abstractcount environment
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\defpersianfont\yasfont{Yas}
-%کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
-\if@bidi@csundef{bidi@digits}{% 
-\newcount\bidi@digits
-\XeTeXinterchartokenstate=\@ne
-\newXeTeXintercharclass\bidi@digits@charclass
-\bidi@digits=`\0 \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\9 \advance\bidi@digits \@ne \repeat
-\bidi@digits=`\۰ \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\۹ \advance\bidi@digits \@ne \repeat
-}{}
-\newXeTeXintercharclass\qom@leftparen@charclass
-\newXeTeXintercharclass\qom@rightparen@charclass
-\XeTeXcharclass `\( \qom@leftparen@charclass
-\XeTeXcharclass `\) \qom@rightparen@charclass
-\XeTeXcharclass `\[ \qom@leftparen@charclass
-\XeTeXcharclass `\] \qom@rightparen@charclass
-\ifdim\the\XeTeXversion\XeTeXrevision\p@>0.99993\p@
-  \chardef\qom@alloc@intercharclass@top=4095
-\else
-  \chardef\qom@alloc@intercharclass@top=255
-\fi
-\XeTeXinterchartoks \qom@alloc@intercharclass@top \bidi@digits@charclass = {\BeginSwitchDigitFont}
-\XeTeXinterchartoks \bidi@digits@charclass \qom@alloc@intercharclass@top = {\EndSwitchDigitFont}
-\XeTeXinterchartoks \qom@leftparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
-\XeTeXinterchartoks \bidi@digits@charclass \qom@rightparen@charclass = {\EndSwitchDigitFont}
-\if@bidi@csundef{if@nonlatin}{%
-\newcommand*{\BeginSwitchDigitFont}{\if@Latin\else\yasfont \fi}
-\newcommand*{\EndSwitchDigitFont}{\if@Latin\else\setpersianfont \fi}
-}{%
-\newcommand*{\BeginSwitchDigitFont}{\if@nonlatin\yasfont \fi}
-\newcommand*{\EndSwitchDigitFont}{\if@nonlatin\setpersianfont \fi}
 }
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \AtEndDocument{%
-\printindex
+%%%%%%%%%%%%%%%%%%%%%% Bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{spacing}{1}
+\bibliographystyle{plain-fa}
+\small
+\bibliography{references}
+\end{spacing}
+%%%%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%%%%%%
+\if@qom@index
+    \printindex%
+\fi    
 %%%%%%%%%%%%%%%%%%%%%% English Abstract %%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{preamblepage}
 \begin{latin}
     \ifx\@abstract@english\undefined%
     \else
-        \pagetitle{\Huge\lr{Abstract}}
+        \chapter*{Abstract}
         \begin{abstractcount}
             {\@abstract@english}%
         \end{abstractcount}
         \vspace*{1cm}\par
-        {\noindent Keywords: \ifx\@keywords@english\undefined\else\bfseries\@keywords@english{}\fi}
+        {\noindent {\bfseries Keywords:}
+         \ifx\@keywords@english\undefined\else\@keywords@english{}\fi}
     \fi
 \end{latin}    
 \end{preamblepage}
@@ -835,7 +1086,7 @@ Your abstract includes \the\WordCount{} words!\fi}%
 \begin{preamblepage}
     \begin{titlepage}
 \begin{latin}
-    {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{qomlogo}\\ The University of Qom}
+    {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\ The University of Qom}
     \\[5pt]
     {\fontsize{12}{14}\selectfont Faculty of 
     \ifx\@faculty@english\undefined\qom@dotline{Mathematics}\else\@faculty@english\fi
