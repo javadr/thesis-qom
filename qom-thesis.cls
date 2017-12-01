@@ -192,6 +192,7 @@
 \thispagestyle{empty}
 \newpage
 \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+%
 %%%%%%%%%  Packages  %%%%%%%%%%%%%%%%%
 %
 %\RequirePackage[immediate]{silence}
@@ -203,13 +204,13 @@
 %\SafeMode
 %-------------------------------------------------------------------------------------------------------------------
 % در ورژن جدید زی‌پرشین برای تایپ متن‌های ریاضی، این سه بسته، حتماً باید فراخوانی شود؛‌ این بسته‌ها در صورت نیاز کاربر به متن افزوده خواهد شد. 
-%\RequirePackage{amsmath}
-%\RequirePackage{amsthm}
-%\RequirePackage{amssymb}
+\RequirePackage{amsmath}
+\RequirePackage{amsthm}
+\RequirePackage{amssymb}
 \RequirePackage{biditools}
 % بسته‌ای برای تنطیم حاشیه‌های بالا، پایین، چپ و راست صفحه
-\RequirePackage[top=35mm, bottom=35mm, left=30mm, right=40mm, 
-        bindingoffset=0mm]{geometry}
+\RequirePackage[top=40mm, bottom=30mm, left=30mm, right=40mm, 
+        bindingoffset=0mm, headsep=15mm]{geometry}
 %
 \RequirePackage{graphicx}
 \graphicspath{{images/}}
@@ -246,6 +247,7 @@
     \makeindex%
 \fi    
 \RequirePackage{tikz}
+\global\let\tikz@ensure@dollar@catcode=\relax
 \RequirePackage{apptools}
 %%%%% The hyperref package should be the last package before xepersian package. 
 \if@qom@print
@@ -286,16 +288,44 @@ bookmarksnumbered = true
     \if@bidi@csundef{@bidi@removefromreset}{}{%
         \@bidi@removefromreset{footnote}{chapter}%
     }
-    %\settextfont[Language=Default,Scale=1.33,BoldFont={IRlotus}]{IRLotus} %scale adopted with respect to XB Zar font.
-    \settextfont[Language=Default,Scale=1.2,]{XB Niloofar} %scale adopted with respect to XB Zar font.  
+%    %\settextfont[Language=Default,Scale=1.33,BoldFont={IRlotus}]{IRLotus} %scale adopted with respect to XB Zar font.
+    \settextfont[Scale=1.12,]{XB Niloofar} %scale adopted with respect to XB Zar font.  
     \setdigitfont[Scale=1]{Yas}
-    %\setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman
+%%    \setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman
+%%%%%% http://qa.parsilatex.com/28063; 
+        \everydisplay\expandafter{%
+            \the\everydisplay\SetDisplayMathsDigits%
+            \let\SetInlineMathsDigits\relax%
+        }
+%%%%%% %%%%%% %%%%%% %%%%    
+%% \doublespacing causes some bad effect in setting yasfont for digits.
+%\renewcommand{\setstretch}[1]{%
+%  \def\baselinestretch{#1}%
+%  \@currsize
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\@ifpackageloaded{listings}{
+    \@ifpackagelater{xepersian}{2016/09/14}
+      {% Do something for the newer version
+        \lstset{ 
+            basicstyle=\setLTR\@nonlatinfalse\footnotesize\ttfamily, % from xepersian ver. 16.8
+            captiondirection=RTL, captionscript=nonlatin,
+        }
+      }
+      {% Do something different for the older version
+        \lstset{    
+            basicstyle=\setLTR\@Latintrue\footnotesize\ttfamily,
+            captiondirection=RTL,
+        }
+        \bidi@appto\lstlistingname{\setLTR\@Latinfalse} % before xepersian ver. 16.7
+      }%
+}{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%  The following code causes the english footnotes will be typeset in paragraph mode wile the perian one typeset in ordinary way. 
     % بر گرفته از استایل مجله ریاضی و جامعه 
     \let\c@footnoteA\c@footnote
     \let\LTRfootnote\footnoteA
-    \renewcommand*{\@makefnmark}{\hbox{\@textsuperscript{\normalfont\@thefnmark}}}
+    \renewcommand*{\@makefnmark}{\hbox{\@textsuperscript{\scriptsize\@thefnmark}}}
       \def\MFL@fnotepara#1#2#3{\let\@thefnmark\@empty
         \NCC@makefnmark{\latinfont #2}%
         \MFL@insert#1{\reset@font\footnotesize
@@ -345,8 +375,6 @@ bookmarksnumbered = true
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %    \paragraphfootnotes
     \setlength{\footmarkwidth}{0pt}
-    %
-
     % تعریف قلم‌های فارسی و انگلیسی اضافی برای استفاده در بعضی از قسمت‌های متن
     \defpersianfont\nastaliq[Language=Default,Scale=2.5,AutoFakeBold]{IranNastaliq}
     \defpersianfont\chapternumber[Language=Default,Scale=1.5,BoldFont={IRlotus}]{IRLotus}
@@ -355,7 +383,7 @@ bookmarksnumbered = true
     \defpersianfont\yasfont{Yas}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%  با استفاده از این دستور می‌توان فونت و فارسی و یا انگلیسی بودن اعداد در فرمول‌ها را به حالت اولیه (یعنی پیش‌فرض لاتک) برگرداند.
-    %\DefaultMathsDigits
+%   \DefaultMathsDigits
     %
     %\DeclareMathSizes{textsize}{mathsize}{scriptsize}{scriptscriptsize}
     % گزینه اول: این برای چه دسته فونتی است. پیش فرض استایل ما فونت 10pt است. 
@@ -364,9 +392,9 @@ bookmarksnumbered = true
     % گزینه چهارم: برای زیرنویس زیرنویس.
 
     % در دستورات زیر ما برای سه حالت، اندازه‌های مورد نظر را تعریف کرده ایم. 
-    \DeclareMathSizes{10}{11}{9}{8}   % For size 10 text
-    \DeclareMathSizes{11}{12}{11}{10}   % For size 11 text
-    \DeclareMathSizes{12}{13}{12}{11}  % For size 12 text
+%    \DeclareMathSizes{10}{11}{9}{8}   % For size 10 text
+%    \DeclareMathSizes{11}{12}{11}{10}   % For size 11 text
+%    \DeclareMathSizes{12}{13}{12}{11}  % For size 12 text
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \newsavebox\qom@thesis@proof@box
     \sbox{\qom@thesis@proof@box}{\textcolor{gray}{\hboxR{\tiny آماده‌ شده توسط کلاس \texttt{qom-thesis}، نسخهٔ \lr{\qom@thesis@version}}}}
@@ -451,6 +479,10 @@ bookmarksnumbered = true
      \fi
     }{}{}    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% because of computeautoilg the following patch sould be appended to make doc more beautiful.
+\bidi@BeforeBeginEnvironment{latin}{\if@nonlatin\medskip\fi}    
+\bidi@BeforeBeginEnvironment{LTR}{\if@nonlatin\medskip\fi}    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
     \if@bidi@csundef{bidi@digits}{% 
         \newcount\bidi@digits
@@ -459,12 +491,25 @@ bookmarksnumbered = true
         \bidi@digits=`\0 \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\9 \advance\bidi@digits \@ne \repeat
         \bidi@digits=`\۰ \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\۹ \advance\bidi@digits \@ne \repeat
     }{}
+    \newif\if@qom@verbatim
+    \bidi@appto\verbatim@font{\@qom@verbatimtrue}
+    \bidi@appto\ttfamily{\@qom@verbatimtrue}
     \newXeTeXintercharclass\qom@leftparen@charclass
     \newXeTeXintercharclass\qom@rightparen@charclass
     \XeTeXcharclass `\( \qom@leftparen@charclass
     \XeTeXcharclass `\) \qom@rightparen@charclass
     \XeTeXcharclass `\[ \qom@leftparen@charclass
     \XeTeXcharclass `\] \qom@rightparen@charclass
+    \XeTeXcharclass `\{ \qom@leftparen@charclass
+    \XeTeXcharclass `\} \qom@rightparen@charclass
+    \XeTeXcharclass `\« \qom@leftparen@charclass
+    \XeTeXcharclass `\» \qom@rightparen@charclass       
+    \XeTeXcharclass `\، \qom@leftparen@charclass    
+    \XeTeXcharclass `\, \qom@leftparen@charclass
+    \XeTeXcharclass `\؛ \qom@leftparen@charclass          
+    \XeTeXcharclass `\; \qom@leftparen@charclass          
+    \XeTeXcharclass `\: \qom@leftparen@charclass          
+    \XeTeXcharclass `\. \qom@leftparen@charclass     
     \ifdim\the\XeTeXversion\XeTeXrevision\p@>0.99993\p@
       \chardef\qom@alloc@intercharclass@top=4095
     \else
@@ -474,12 +519,16 @@ bookmarksnumbered = true
     \XeTeXinterchartoks \bidi@digits@charclass \qom@alloc@intercharclass@top = {\EndSwitchDigitFont}
     \XeTeXinterchartoks \qom@leftparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
     \XeTeXinterchartoks \bidi@digits@charclass \qom@rightparen@charclass = {\EndSwitchDigitFont}
+    \XeTeXinterchartoks \qom@rightparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
+    \XeTeXinterchartoks \bidi@digits@charclass \qom@leftparen@charclass = {\EndSwitchDigitFont}    
     \if@bidi@csundef{if@nonlatin}{%
-        \newcommand*{\BeginSwitchDigitFont}{\if@Latin\else\yasfont \fi}
-        \newcommand*{\EndSwitchDigitFont}{\if@Latin\else\setpersianfont \fi}
+        \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
+        \global\edef\currentfont{\the\font}\if@Latin\else\yasfont \fi\fi}
+        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@Latin\else\currentfont \fi\fi}
     }{%
-        \newcommand*{\BeginSwitchDigitFont}{\if@nonlatin\yasfont \fi}
-        \newcommand*{\EndSwitchDigitFont}{\if@nonlatin\setpersianfont \fi}
+        \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
+        \global\edef\currentfont{\the\font}\if@nonlatin\yasfont \fi\fi}
+        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@nonlatin\currentfont \fi\fi}
     }
     \if@qom@debug
     \AtBeginShipout{%
@@ -521,7 +570,7 @@ bookmarksnumbered = true
 {\thispagestyle{empty}}% at the end of  environment
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\pagetitle#1{%
-\vspace*{5cm}
+\vspace*{3cm}
 \begingroup\if@Kashida@on\KashidaOff\fi
 \nastaliq #1
 \endgroup
@@ -609,6 +658,9 @@ bookmarksnumbered = true
 }
 \newcommand\refereeAck{%
 \begin{preamblepage}
+%\begin{minipage}{\textwidth}
+%\vbox
+{
     \small
     \baselineskip=.7cm
 %    \parindent=\z@
@@ -622,7 +674,7 @@ bookmarksnumbered = true
 %    \end{center}
 
     {\bfseries با تأييدات خداوند متعال و با استعانت از حضرت ولی عصر}
-     {\small (عجل الله تعالی فرجه الشريف)}
+     {\footnotesize (عجل الله تعالی فرجه الشريف)}
      
      
      جلسه دفاعیه \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi{} خانم/آقای{}
@@ -649,12 +701,8 @@ bookmarksnumbered = true
         \ifx\@degree\@acceptable\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt مورد دفاع قرار گرفت. 
         
     \vskip 5pt
-%        \smallskip
-%    \vspace{5mm}
-    %\begin{tabular}{|@{}R{5.2cm}|C{5.2cm}|C{3cm}|C{3cm}@{}|}
     \def\@nextrow{\\[10pt]}
-    \begin{tabularx}{\textwidth}%{|R{4.2cm}@{}|C{4.2cm}|C{2cm}|C{3.3cm}@{}|}
-    {|@{\hskip 3pt}p{4cm}@{\hskip 3pt}|@{\hskip 2pt}c@{\hskip 2pt}|@{}c@{}|@{}X@{}|}
+    \begin{tabularx}{\textwidth}{|@{\hskip 3pt}p{4cm}@{\hskip 3pt}|@{\hskip 2pt}c@{\hskip 2pt}|@{}c@{}|@{}X@{}|}
     \toprule
     \multicolumn{1}{|c|}{\titrfont\small نام و نام‌خانوادگی}  &
     \multicolumn{1}{c|}{\titrfont\small سمت} &
@@ -703,14 +751,14 @@ bookmarksnumbered = true
      &  \@second@referee@external@rank & \@nextrow\fi\fi
 
     \ifx\qom@graduate@repsentative@name\undefined\else\qom@graduate@repsentative@name\fi &  
-     \parbox{4.1cm}{\centering استاد ناظر و \par نماینده تحصیلات تکمیلی}
+     \parbox[t]{4.1cm}{\centering استاد ناظر و \par نماینده تحصیلات تکمیلی}
      & \ifx\qom@graduate@repsentative@rank\undefined\else\qom@graduate@repsentative@rank\fi &
     \\
 %    & نماینده تحصیلات تکمیلی & & \\[5pt]
     \bottomrule
     \end{tabularx}
 
-    \bigskip
+    \bigskip       
 %        \vfill
         \begin{tabularx}{\textwidth}{XX}
             \begin{minipage}{.4\textwidth}
@@ -725,6 +773,8 @@ bookmarksnumbered = true
             \end{minipage}\\
         \end{tabularx}
         \vfill    
+ \thispagestyle{empty}
+ }
 \end{preamblepage}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\qomtitle}{%
@@ -774,9 +824,10 @@ bookmarksnumbered = true
     \ifx\@title@persian\undefined\qom@dotlined{9cm}\else\bfseries {\fontsize{22}{24}\selectfont\@title@persian }\fi}
     \baselineskip=1.5cm\par
     \vskip 4ex
-     \baselineskip=.5cm
-    \large
-    {\large\bfseries\ifcase\qom@thesis@supervisor%0
+     \baselineskip=1cm
+
+%    \large
+    {\bfseries\ifcase\qom@thesis@supervisor%0
     \titrfont استاد راهنما: \\
     \qom@dotlined{5cm}
     \or%1
@@ -788,7 +839,7 @@ bookmarksnumbered = true
     \fi
     }
     \par 
-    {\large\bfseries\ifcase\qom@thesis@advisor\relax%0
+    {\bfseries\ifcase\qom@thesis@advisor\relax%0
     \ifnum\qom@thesistype=0\titrfont استاد مشاور: \\ \qom@dotlined{5cm} \fi
     \or%1
     \titrfont استاد مشاور: \\
@@ -801,7 +852,7 @@ bookmarksnumbered = true
     \fi
     }
     \par
-    {\large%
+    {%
     \titrfont نگارنده: \\
     \ifx\@author@persian\undefined\qom@dotlined{4cm}
     \else\fontsize{12}{14}\selectfont\bfseries\@author@persian\fi}
@@ -926,60 +977,62 @@ bookmarksnumbered = true
 %\newtheorem{remark}{ملاحظه}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \AtBeginDocument{%
-% Sophisticated front matter page-numbering
-%\pagenumbering{roman}
-%\let\old@chapter\@chapter
-%\def\@chapter{%
-%    \ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi
-%  \old@chapter}
-%
-%\bidi@appto\chapter{%\typeout{@@@@@@@@@@\the\c@chapter @@@@@@@@@@@}
-%\ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi}
-\def\@makechapterhead#1{%
-  \vspace*{50\p@}%
-  {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi \normalfont
-    \ifnum \c@secnumdepth >\m@ne
-      \if@mainmatter
-        \huge\bfseries \@chapapp\space 
-        \ifappendix \abjad{chapter}\else \expandafter\tartibinumeral\c@chapter\fi
-        \par\nobreak
-        \vskip 20\p@
-      \fi
-    \fi
-    \interlinepenalty\@M
-    \Huge \bfseries #1\par\nobreak
-    \vskip 40\p@
-    \nobreak
-%    \thispagestyle{empty}
-%    \newpage
-  }}
-\def\@makeschapterhead#1{%
-  \vspace*{50\p@}%
-  {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi
-    \normalfont
-    \interlinepenalty\@M
-    \Huge \bfseries  #1\par\nobreak
-    \vskip 40\p@
-    \thispagestyle{empty}
-%%    \newpage
-  }}  
-  \flushbottom
-  \bidi@appto{\appendix}{\addcontentsline{toc}{chapter}{پیوست‌ها}\appendixtrue}
-%  \bidi@epreto{\chapter}{\ifnum\c@chapter=0\mainmatter\fi}
-    \setlength{\parindent}{1cm}
-    \setlength{\parskip}{0pt}
-%
-%\setlength{\footskip}{
-%\paperheight   -(1in+\voffset+\topmargin+\headheight+\headsep+\textheight)  -1cm
-%}
-%%%\bidi@appto\tableofcontents{%
-%%%\pagenumbering{arabic}
-%%%\setcounter{page}{1}
-%%%\clearpage
-%%%\cleardoublepage
-%%%}
-\frontmatter
-\qomtitle
+    % Sophisticated front matter page-numbering
+    %\pagenumbering{roman}
+    %\let\old@chapter\@chapter
+    %\def\@chapter{%
+    %    \ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi
+    %  \old@chapter}
+    %
+    %\bidi@appto\chapter{%\typeout{@@@@@@@@@@\the\c@chapter @@@@@@@@@@@}
+    %\ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi}
+    \def\@makechapterhead#1{%
+      \vspace*{50\p@}%
+      {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi \normalfont
+        \ifnum \c@secnumdepth >\m@ne
+          \if@mainmatter
+            \huge\bfseries \@chapapp\space 
+            \ifappendix \abjad{chapter}\else \expandafter\tartibinumeral\c@chapter\fi
+            \par\nobreak
+            \vskip 20\p@
+          \fi
+        \fi
+        \interlinepenalty\@M
+        \Huge \bfseries #1\par\nobreak
+        \vskip 40\p@
+        \nobreak
+    %    \thispagestyle{empty}
+    %    \newpage
+      }}
+    \def\@makeschapterhead#1{%
+      \vspace*{50\p@}%
+      {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi
+        \normalfont
+        \interlinepenalty\@M
+        \Huge \bfseries  #1\par\nobreak
+        \vskip 40\p@
+        \thispagestyle{empty}
+    %%    \newpage
+      }}  
+%      \flushbottom
+      \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}
+      \appendixtrue}
+    %  \bidi@epreto{\chapter}{\ifnum\c@chapter=0\mainmatter\fi}
+        \setlength{\parindent}{1cm}
+        \setlength{\parskip}{0pt}
+    %
+    %\setlength{\footskip}{
+    %\paperheight   -(1in+\voffset+\topmargin+\headheight+\headsep+\textheight)  -1cm
+    %}
+    %%%\bidi@appto\tableofcontents{%
+    %%%\pagenumbering{arabic}
+    %%%\setcounter{page}{1}
+    %%%\clearpage
+    %%%\cleardoublepage
+    %%%}
+    \pagenumbering{roman}
+    \qomtitle
+    \frontmatter
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\@part[#1]#2{%
@@ -1016,145 +1069,147 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% http://qa.parsilatex.com/25972/
 \newenvironment{abstractcount}{%
-\newcount\WordCount
-\newcount\My@Alphabets
-\newXeTeXintercharclass\MyAlphabets
-\newXeTeXintercharclass\MyPunctuations
-\XeTeXcharclass`\{\MyPunctuations
-\XeTeXcharclass`\}\MyPunctuations
-\XeTeXcharclass`\[\MyPunctuations
-\XeTeXcharclass`\]\MyPunctuations
-\XeTeXcharclass`\(\MyPunctuations
-\XeTeXcharclass`\)\MyPunctuations
-\XeTeXcharclass`\`\MyPunctuations
-\XeTeXcharclass`\'\MyPunctuations
-\XeTeXcharclass`\!\MyPunctuations
-\XeTeXcharclass`\:\MyPunctuations
-\XeTeXcharclass`\;\MyPunctuations
-\XeTeXcharclass`\?\MyPunctuations
-\XeTeXcharclass`\؟\MyPunctuations
-\XeTeXcharclass`\«\MyPunctuations
-\XeTeXcharclass`\»\MyPunctuations
-\XeTeXcharclass`\،\MyPunctuations
-\XeTeXcharclass`\,\MyPunctuations
-\My@Alphabets=`\آ \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\ی \advance\My@Alphabets \@ne \repeat
-\My@Alphabets=`\A \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\Z \advance\My@Alphabets \@ne \repeat
-\My@Alphabets=`\a \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\z \advance\My@Alphabets \@ne \repeat
-\XeTeXinterchartoks \MyAlphabets 4095 = {\PrintWordCount}
-\XeTeXinterchartoks \MyAlphabets \MyPunctuations = {\PrintWordCount}
-\XeTeXinterchartoks \MyAlphabets \bidi@dot@charclass = {\PrintWordCount}
-\newcommand*{\PrintWordCount}{%\raise.4\baselineskip
-\llap{\tiny\global\advance\WordCount\@ne\textcolor{red}{}%{\the\WordCount}
-}}}% beginnig of abstractcount environment
-{\renewcommand*{\PrintWordCount}{}
-\ifnum\WordCount>300%
-\par\null\vspace{5mm}
-\centerline{\color{red}\bfseries\if@RTL\zarfont "متن چکیده نباید بیش از ۳۰۰ کاراکتر باشد؛‌ لطفاً آن را ویرایش نمایید.``\else%
-``The Abstract cannot contain more than 300 words."\fi}
-\centerline{\color{gray}\bfseries\if@RTL\zarfont در حال حاضر متن چکیدهٔ شما حاوی \the\WordCount{} کلمه است!\else%
-This one includes \the\WordCount{} words! Please modify it.\fi}%
-\fi
+    \newcount\WordCount
+    \newcount\My@Alphabets
+    \newXeTeXintercharclass\MyAlphabets
+    \newXeTeXintercharclass\MyPunctuations
+    \XeTeXcharclass`\{\MyPunctuations
+    \XeTeXcharclass`\}\MyPunctuations
+    \XeTeXcharclass`\[\MyPunctuations
+    \XeTeXcharclass`\]\MyPunctuations
+    \XeTeXcharclass`\(\MyPunctuations
+    \XeTeXcharclass`\)\MyPunctuations
+    \XeTeXcharclass`\`\MyPunctuations
+    \XeTeXcharclass`\'\MyPunctuations
+    \XeTeXcharclass`\!\MyPunctuations
+    \XeTeXcharclass`\:\MyPunctuations
+    \XeTeXcharclass`\;\MyPunctuations
+    \XeTeXcharclass`\?\MyPunctuations
+    \XeTeXcharclass`\؟\MyPunctuations
+    \XeTeXcharclass`\«\MyPunctuations
+    \XeTeXcharclass`\»\MyPunctuations
+    \XeTeXcharclass`\،\MyPunctuations
+    \XeTeXcharclass`\,\MyPunctuations
+    \My@Alphabets=`\آ \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\ی \advance\My@Alphabets \@ne \repeat
+    \My@Alphabets=`\A \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\Z \advance\My@Alphabets \@ne \repeat
+    \My@Alphabets=`\a \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\z \advance\My@Alphabets \@ne \repeat
+    \XeTeXinterchartoks \MyAlphabets 4095 = {\PrintWordCount}
+    \XeTeXinterchartoks \MyAlphabets \MyPunctuations = {\PrintWordCount}
+    \XeTeXinterchartoks \MyAlphabets \bidi@dot@charclass = {\PrintWordCount}
+    \newcommand*{\PrintWordCount}{%\raise.4\baselineskip
+    \llap{\tiny\global\advance\WordCount\@ne\textcolor{red}{}%{\the\WordCount}
+    }}
+}% end of beginnig of abstractcount environment
+{%
+    \renewcommand*{\PrintWordCount}{}
+    \ifnum\WordCount>300%
+    \par\null\vspace{5mm}
+    \centerline{\color{red}\bfseries\if@RTL\zarfont "متن چکیده نباید بیش از ۳۰۰ کاراکتر باشد؛‌ لطفاً آن را ویرایش نمایید.``\else%
+    ``The Abstract cannot contain more than 300 words."\fi}
+    \centerline{\color{gray}\bfseries\if@RTL\zarfont در حال حاضر متن چکیدهٔ شما حاوی \the\WordCount{} کلمه است!\else%
+    This one includes \the\WordCount{} words! Please modify it.\fi}%
+    \fi
 }% end of abstractcount environment
 }
 \AtEndDocument{%
-%%%%%%%%%%%%%%%%%%%%%% Bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{spacing}{1}
-\bibliographystyle{plain-fa}
-\small
-\bibliography{references}
-\end{spacing}
-%%%%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%%%%%%
-\if@qom@index
-    \printindex%
-\fi    
-%%%%%%%%%%%%%%%%%%%%%% English Abstract %%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{preamblepage}
-\begin{latin}
-    \ifx\@abstract@english\undefined%
-    \else
-        \chapter*{Abstract}
-        \begin{abstractcount}
-            {\@abstract@english}%
-        \end{abstractcount}
-        \vspace*{1cm}\par
-        {\noindent {\bfseries Keywords:}
-         \ifx\@keywords@english\undefined\else\@keywords@english{}\fi}
-    \fi
-\end{latin}    
-\end{preamblepage}
-%%%%%%%%%%%%%%%%%%%%%% English Title %%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{preamblepage}
-    \begin{titlepage}
-\begin{latin}
-    {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\ The University of Qom}
-    \\[5pt]
-    {\fontsize{12}{14}\selectfont Faculty of 
-    \ifx\@faculty@english\undefined\qom@dotline{Mathematics}\else\@faculty@english\fi
-    \\[5pt] 
-    Department of  
-    \ifx\@department@english\undefined\qom@dotline{Computer Science}\else\@department@english\fi}
-    \\[10pt] 
-    %\par
-    %\vspace{.3\baselineskip}
-%    {\vskip 4ex
-%    \fontsize{14}{16}\selectfont\bfseries
-%    \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی‌ارشد}\or{پروژه کارشناسی}\fi
-%    }
-    %\vskip 2ex
-    \vskip 5pt
-    \begin{center}
-    {\fontsize{12}{14}\selectfont\bfseries  
-    A Thesis Submitted in Partial Fulfillment of the Requirements for\linebreak the Degree of 
-    \ifcase\qom@thesistype{Doctor of Philosophy}\or{Master of Science}\or{Bachelor of Science}\fi{} in
-    {\ifx\@major@english\undefined\qom@dotline{Computer Science}\else\bfseries\@major@english\fi}{}
-    }
-    \end{center}
-    \vskip 4ex
-    {\fontsize{14}{16}\selectfont\textsf{Title:} \\
-    \ifx\@title@english\undefined\qom@dotlined{9cm}\else\bfseries {\fontsize{22}{24}\selectfont\@title@english }\fi}
-    \baselineskip=1.5cm\par
-    \vskip 4ex
-     \baselineskip=.5cm
-    \large
-    {\large\ifcase\qom@thesis@supervisor@english%0
-     \textsf{Supervisor:} \\
-    \qom@dotlined{5cm}
-    \or%1
-     \textsf{Supervisor:} \\
-    \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english
-    \or%2
-     \textsf{Supervisors:} \\
-    \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english{} and \@second@supervisor@name@english
-    \fi
-    }
-    \par 
-    {\large\ifcase\qom@thesis@advisor@english\relax%0
-    \ifnum\qom@thesistype=0 Advisor: \\ \qom@dotlined{5cm} \fi
-    \or%1
-    \textsf{Advisor:} \\
-    \bfseries\fontsize{12}{14}\selectfont%
-    \@first@advisor@name@english
-    \or%2
-     \textsf{Advisors:} \\
-    \bfseries\fontsize{12}{14}\selectfont%
-    \@first@advisor@name@english{} and \@second@advisor@name@english
-    \fi
-    }
-    \par
-    {\large%
-    \textsf{By:} \\
-    \ifx\@author@english\undefined\qom@dotlined{4cm}
-    \else\fontsize{12}{14}\selectfont\bfseries\@author@english\fi}
-    \par
-    {\fontsize{12}{14}\selectfont 
-    \ifx\@submissiondate@english\undefined Season Year\else\@submissiondate@english\fi}
-\end{latin}    
-    \end{titlepage}
-\end{preamblepage}    
-%%%%%%%%%%%%%%%%%%% Blank Page %%%%%%%%%%%%%%%%%%%%%%%%%
-\cleardoublepage
-\newpage\null
-\thispagestyle{empty}
+    %%%%%%%%%%%%%%%%%%%%%% Bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{spacing}{1}
+    \bibliographystyle{plain-fa}
+    \small
+    \bibliography{references}
+    \end{spacing}
+    %%%%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%%%%%%
+    \if@qom@index
+        \printindex%
+    \fi    
+    %%%%%%%%%%%%%%%%%%%%%% English Abstract %%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{preamblepage}
+    \begin{latin}
+        \ifx\@abstract@english\undefined%
+        \else
+            \chapter*{Abstract}
+            \begin{abstractcount}
+                {\@abstract@english}%
+            \end{abstractcount}
+            \vspace*{1cm}\par
+            {\noindent {\bfseries Keywords:}
+             \ifx\@keywords@english\undefined\else\@keywords@english{}\fi}
+        \fi
+    \end{latin}    
+    \end{preamblepage}
+    %%%%%%%%%%%%%%%%%%%%%% English Title %%%%%%%%%%%%%%%%%%%%%%%%%
+    \begin{preamblepage}
+        \begin{titlepage}
+    \begin{latin}
+        {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\ The University of Qom}
+        \\[5pt]
+        {\fontsize{12}{14}\selectfont Faculty of 
+        \ifx\@faculty@english\undefined\qom@dotline{Mathematics}\else\@faculty@english\fi
+        \\[5pt] 
+        Department of  
+        \ifx\@department@english\undefined\qom@dotline{Computer Science}\else\@department@english\fi}
+        \\[10pt] 
+        %\par
+        %\vspace{.3\baselineskip}
+    %    {\vskip 4ex
+    %    \fontsize{14}{16}\selectfont\bfseries
+    %    \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی‌ارشد}\or{پروژه کارشناسی}\fi
+    %    }
+        %\vskip 2ex
+        \vskip 5pt
+        \begin{center}
+        {\fontsize{12}{14}\selectfont\bfseries  
+        A Thesis Submitted in Partial Fulfillment of the Requirements for\linebreak the Degree of 
+        \ifcase\qom@thesistype{Doctor of Philosophy}\or{Master of Science}\or{Bachelor of Science}\fi{} in
+        {\ifx\@major@english\undefined\qom@dotline{Computer Science}\else\bfseries\@major@english\fi}{}
+        }
+        \end{center}
+        \vskip 4ex
+        {\fontsize{14}{16}\selectfont\textsf{Title:} \\
+        \ifx\@title@english\undefined\qom@dotlined{9cm}\else\bfseries {\fontsize{22}{24}\selectfont\@title@english }\fi}
+        \baselineskip=1.5cm\par
+        \vskip 4ex
+         \baselineskip=.5cm
+        \large
+        {\large\ifcase\qom@thesis@supervisor@english%0
+         \textsf{Supervisor:} \\
+        \qom@dotlined{5cm}
+        \or%1
+         \textsf{Supervisor:} \\
+        \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english
+        \or%2
+         \textsf{Supervisors:} \\
+        \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english{} and \@second@supervisor@name@english
+        \fi
+        }
+        \par 
+        {\large\ifcase\qom@thesis@advisor@english\relax%0
+        \ifnum\qom@thesistype=0 Advisor: \\ \qom@dotlined{5cm} \fi
+        \or%1
+        \textsf{Advisor:} \\
+        \bfseries\fontsize{12}{14}\selectfont%
+        \@first@advisor@name@english
+        \or%2
+         \textsf{Advisors:} \\
+        \bfseries\fontsize{12}{14}\selectfont%
+        \@first@advisor@name@english{} and \@second@advisor@name@english
+        \fi
+        }
+        \par
+        {\large%
+        \textsf{By:} \\
+        \ifx\@author@english\undefined\qom@dotlined{4cm}
+        \else\fontsize{12}{14}\selectfont\bfseries\@author@english\fi}
+        \par
+        {\fontsize{12}{14}\selectfont 
+        \ifx\@submissiondate@english\undefined Season Year\else\@submissiondate@english\fi}
+    \end{latin}    
+        \end{titlepage}
+    \end{preamblepage}    
+    %%%%%%%%%%%%%%%%%%% Blank Page %%%%%%%%%%%%%%%%%%%%%%%%%
+    \cleardoublepage
+    \newpage\null
+    \thispagestyle{empty}
 }
 
 \endinput
