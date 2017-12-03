@@ -12,6 +12,9 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.21, Dec 3th, 2017
+%%%  adding \strut to \RTL and \LTR command, for solving http://qa.parsilatex.com/28105 by vafa khalighi. 
+%%% Some improvement in dictionaries code. 
 %%%  ver 0.2, Dec 3th, 2017
 %%%  Dictionary files are automatically read from the dicfa2en.tex and dicen2fa.tex. 
 %%%  ver 0.1, Nov 12th, 2017
