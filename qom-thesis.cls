@@ -12,12 +12,14 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.2, Dec 3th, 2017
+%%%  Dictionary files are automaticly read from the dicfa2en.tex and dicen2fa.tex. 
 %%%  ver 0.1, Nov 12th, 2017
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/11/12}
-\def\qom@thesis@version{0.1}
+\def\qom@thesis@date{2017/12/03}
+\def\qom@thesis@version{0.2}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -193,6 +195,20 @@
 \newpage
 \if@twocolumn\hbox{}\newpage\fi\fi\fi}
 %
+\newif\if@qom@TestSubString%
+\def\qom@IfSubString #1#2{%
+    \edef\@qom@MainString{#1}%
+    \def\@qom@TestSubS ##1#2##2\@qom@Del{\edef\@qom@TestTemp{##1}}%
+    \expandafter\@qom@TestSubS\@qom@MainString#2\@qom@Del%
+    \ifx\@qom@MainString\@qom@TestTemp%
+        \@qom@TestSubStringfalse%
+    \else%
+        \@qom@TestSubStringtrue%
+    \fi%
+}%
+\def\qom@firstletter#1{\expandafter\qom@justfirst#1\relax}
+\def\qom@justfirst#1#2\relax{#1}
+%%%%%%%%%%%%%%End of Some Macros for Internal Use %%%%%%%%%%%%%%%%
 %%%%%%%%%  Packages  %%%%%%%%%%%%%%%%%
 %
 %\RequirePackage[immediate]{silence}
@@ -208,6 +224,7 @@
 \RequirePackage{amsthm}
 \RequirePackage{amssymb}
 \RequirePackage{biditools}
+\RequirePackage{multicol}
 % بسته‌ای برای تنطیم حاشیه‌های بالا، پایین، چپ و راست صفحه
 \RequirePackage[top=40mm, bottom=30mm, left=30mm, right=40mm, 
         bindingoffset=0mm, headsep=15mm]{geometry}
@@ -293,10 +310,12 @@ bookmarksnumbered = true
     \setdigitfont[Scale=1]{Yas}
 %%    \setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman
 %%%%%% http://qa.parsilatex.com/28063; 
+        \@ifpackagelater{xepersian}{2017/11/30}{} 
+        {%before  ver. 19.4
         \everydisplay\expandafter{%
             \the\everydisplay\SetDisplayMathsDigits%
             \let\SetInlineMathsDigits\relax%
-        }
+        }}
 %%%%%% %%%%%% %%%%%% %%%%    
 %% \doublespacing causes some bad effect in setting yasfont for digits.
 %\renewcommand{\setstretch}[1]{%
@@ -1118,6 +1137,70 @@ bookmarksnumbered = true
     \small
     \bibliography{references}
     \end{spacing}
+    %%%%%%%%%%%%%%%%%%%%%% Making Dictionary %%%%%%%%%%%%%%%%%%%%%%%%%
+    \def\qom@dic@type{en}
+    \newcommand\qom@makedic[1][en]{%
+        \def\@dic@type{#1}
+        \parindent=\z@
+        \ifx\qom@dic@type\@dic@type
+            \def\qom@dicrow##1##2{\par\bigskip##1\dotfill\rl{##2}\par}  %% en2fa
+        \else
+            \def\qom@dicrow##1##2{\par\medskip##1\dotfill\lr{##2}\par}  %% fa2en
+        \fi
+        \def\qom@dic@letter@space{\def\qom@dic@letter@space{\vspace*{3mm}}}
+        \def\qom@dic@letter@title##1{\qom@dic@letter@space{\textbf{##1}}}                
+        \expandafter\gdef\expandafter\qom@trimtok##1=##2;\relax{\qom@dicrow{##1}{##2}}%
+        \gdef\qom@trimmer##1{\expandafter\qom@trimtok ##1;\relax}
+        \newread\qom@reader
+        \gdef\qom@letter{\relax}
+        \ifx\qom@dic@type\@dic@type\latin\fi
+        \footnotesize
+        \ifx\qom@dic@type\@dic@type\LTRmulticolcolumns\fi
+        \begin{multicols*}{2}
+            \ifx\qom@dic@type\@dic@type
+                \openin\qom@reader=dicen2fa.tex\relax
+            \else
+                \openin\qom@reader=dicfa2en.tex\relax
+            \fi                
+            \loop
+                \readline\qom@reader to \qom@data
+                \unless\ifeof\qom@reader
+                    \qom@IfSubString{\qom@data}{=}
+                    \if@qom@TestSubString
+                        \edef\qom@dic@letter{\qom@firstletter{\qom@data}}
+                        \ifx\qom@letter\qom@dic@letter\else%
+                            \edef\qom@letter{\qom@dic@letter}
+                            \qom@dic@letter@title{\qom@dic@letter}
+                        \fi
+                        \qom@trimmer{\qom@data}
+                    \fi                        
+            \repeat
+            \closein\qom@reader
+        \end{multicols*}
+        \ifx\qom@dic@type\@dic@type\endlatin\fi
+    }        
+    %%%%%%%%%%%%%%%%%%%%%% Persian to English Dictionary %%%%%%%%%%%%%%%%%%%%%%%%%
+    \newif\if@qom@dicfatoen
+    \IfFileExists{dicfa2en.tex}{\@qom@dicfatoentrue}%
+    {\typeout{======There is no persian to english dictionary file in the main folder, named dicfa2en.tex.======}}
+    \if@qom@dicfatoen
+        \chapter*{واژه‌نامه‌ فارسی به انگلیسی}
+        \markboth{واژه‌نامه‌ فارسی به انگلیسی}{واژه‌نامه‌ فارسی به انگلیسی}
+        \addcontentsline{toc}{chapter}{واژه‌نامه‌ فارسی به انگلیسی}
+        %%%%%%
+        \qom@makedic[fa]
+    \fi            
+    %%%%%%%%%%%%%%%%%%%%%% English to Persian Dictionary %%%%%%%%%%%%%%%%%%%%%%%%%
+    \newif\if@qom@dicentofa
+    \IfFileExists{dicen2fa.tex}{\@qom@dicentofatrue}%
+    {\typeout{======There is no english to persian dictionary file in the main folder, named dicfa2en.tex.======}}
+    \if@qom@dicentofa
+        \chapter*{ واژه‌نامه‌ انگلیسی به فارسی}
+        \markboth{واژه‌نامه‌ انگلیسی به فارسی}{واژه‌نامه‌ انگلیسی به فارسی}
+        \addcontentsline{toc}{chapter}{واژه‌نامه‌ انگلیسی به فارسی}
+        %%%%%%
+        \qom@makedic[en]
+    \fi        
     %%%%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%%%%%%
     \if@qom@index
         \printindex%
