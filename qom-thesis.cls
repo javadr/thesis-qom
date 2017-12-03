@@ -13,7 +13,7 @@
 %%%   
 %%%  Change Log:
 %%%  ver 0.2, Dec 3th, 2017
-%%%  Dictionary files are automaticly read from the dicfa2en.tex and dicen2fa.tex. 
+%%%  Dictionary files are automatically read from the dicfa2en.tex and dicen2fa.tex. 
 %%%  ver 0.1, Nov 12th, 2017
 %%%  First Release
 
