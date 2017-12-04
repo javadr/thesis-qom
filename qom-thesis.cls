@@ -12,6 +12,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.22, Dec 4th, 2017
+%%%  some improvement in TOC. 
 %%%  ver 0.21, Dec 3th, 2017
 %%%  adding \strut to \RTL and \LTR command, for solving http://qa.parsilatex.com/28105 by vafa khalighi. 
 %%% Some improvement in dictionaries code. 
@@ -255,6 +257,11 @@
 \RequirePackage{setspace}
 %
 \RequirePackage{fancyhdr}
+\RequirePackage[titles, subfigure]{tocloft}
+\addtolength{\cftchapnumwidth}{10pt}
+\addtolength{\cftsecnumwidth}{10pt}
+\addtolength{\cftsubsecnumwidth}{10pt}      
+
 % بسته‌ای برای ظاهر شدن «مراجع»  در فهرست مطالب 
 %nottoc Disables the inclusion of the ToC.
 %notlot Disables the inclusion of the List of Tables.
@@ -502,12 +509,14 @@ bookmarksnumbered = true
     }{}{}    
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% because of computeautoilg the following patch sould be appended to make doc more beautiful.
+        \@ifpackagelater{bidi}{2017/12/02}{} 
+        {%before  ver. 31.6
 %\bidi@BeforeBeginEnvironment{latin}{\if@nonlatin\medskip\fi}    
 %\bidi@BeforeBeginEnvironment{LTR}{\if@nonlatin\medskip\fi}    
-        \@ifpackagelater{xepersian}{2017/12/02}{} 
-        {%before  ver. 31.6
-        \bidi@appto\RTL{\strut}
-        \bidi@appto\LTR{\strut}
+%        \bidi@appto\RTL{\parshape\z@\strut}
+%        \bidi@appto\LTR{\parshape\z@\strut}
+%\def\RTL{\par\@RTLtrue\@RTL@footnotetrue\hsize\linewidth\parshape\z@\strut}
+%\def\LTR{\par\@RTLfalse\@RTL@footnotefalse\hsize\linewidth\parshape\z@\strut}
         }
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
@@ -542,12 +551,15 @@ bookmarksnumbered = true
     \else
       \chardef\qom@alloc@intercharclass@top=255
     \fi
+    \chardef\qom@CharNormal=0
     \XeTeXinterchartoks \qom@alloc@intercharclass@top \bidi@digits@charclass = {\BeginSwitchDigitFont}
     \XeTeXinterchartoks \bidi@digits@charclass \qom@alloc@intercharclass@top = {\EndSwitchDigitFont}
     \XeTeXinterchartoks \qom@leftparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
     \XeTeXinterchartoks \bidi@digits@charclass \qom@rightparen@charclass = {\EndSwitchDigitFont}
     \XeTeXinterchartoks \qom@rightparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
     \XeTeXinterchartoks \bidi@digits@charclass \qom@leftparen@charclass = {\EndSwitchDigitFont}    
+    \XeTeXinterchartoks \qom@CharNormal \bidi@digits@charclass = {\BeginSwitchDigitFont}
+    \XeTeXinterchartoks \bidi@digits@charclass \qom@CharNormal = {\EndSwitchDigitFont}     
     \if@bidi@csundef{if@nonlatin}{%
         \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
         \global\edef\currentfont{\the\font}\if@Latin\else\yasfont \fi\fi}
@@ -1019,7 +1031,7 @@ bookmarksnumbered = true
         \ifnum \c@secnumdepth >\m@ne
           \if@mainmatter
             \huge\bfseries \@chapapp\space 
-            \ifappendix \abjad{chapter}\else \expandafter\tartibinumeral\c@chapter\fi
+            \ifappendix \harfi{chapter}\else \expandafter\tartibinumeral\c@chapter\fi
             \par\nobreak
             \vskip 20\p@
           \fi
@@ -1042,8 +1054,8 @@ bookmarksnumbered = true
     %%    \newpage
       }}  
 %      \flushbottom
-      \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}
-      \appendixtrue}
+     \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}%\appendices
+     \appendixtrue}
     %  \bidi@epreto{\chapter}{\ifnum\c@chapter=0\mainmatter\fi}
         \setlength{\parindent}{1cm}
         \setlength{\parskip}{0pt}
@@ -1153,14 +1165,15 @@ bookmarksnumbered = true
         \markboth{#1}{#1}
         \addcontentsline{toc}{chapter}{#1}
         \parindent=\z@%
+        \parskip\z@ \@plus .3\p@\relax
         \if@qom@dicentofa%
-            \def\qom@dicrow##1##2{\par\bigskip##1\dotfill\rl{##2}\par}%% en2fa
+            \def\qom@dicrow##1##2{\bigskip##1\dotfill\rl{##2}\par}%% en2fa
         \fi%    
         \if@qom@dicfatoen%
-            \def\qom@dicrow##1##2{\par\medskip##1\dotfill\dotfill\hbox{\lr{##2}}\par}%% fa2en
+            \def\qom@dicrow##1##2{\medskip##1\dotfill\dotfill\hbox{\lr{##2}}\par}%% fa2en
         \fi%
-        \def\qom@dic@letter@space{\def\qom@dic@letter@space{\vspace*{3mm}}}%
-        \def\qom@dic@letter@title##1{\qom@dic@letter@space\centerline{\normalfont\textbf{##1}}}%   
+        \def\qom@dic@letter@space{\def\qom@dic@letter@space{\bigskip}}%
+        \def\qom@dic@letter@title##1{\qom@dic@letter@space\centerline{\normalfont\textbf{##1}}\nobreak}%   
         \expandafter\gdef\expandafter\qom@trimtok##1=##2;\relax{\qom@dicrow{##1}{##2}}%
         \gdef\qom@trimmer##1{\expandafter\qom@trimtok ##1;\relax}%
         \newread\qom@reader%
@@ -1183,8 +1196,10 @@ bookmarksnumbered = true
                     \if@qom@TestSubString%
                         \edef\qom@dic@letter{\qom@firstletter{\qom@data}}%
                         \ifx\qom@letter\qom@dic@letter\else%
+%                            \medskip
                             \edef\qom@letter{\qom@dic@letter}%
                             \qom@dic@letter@title{\qom@dic@letter}%
+%                            \lettergroup{\qom@dic@letter}
                         \fi%
                         \qom@trimmer{\qom@data}%
                     \fi%
