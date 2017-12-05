@@ -1,6 +1,6 @@
 %%%
 %%%  This is file `qom-thesis.cls',
-%%%  Version 0.1 
+%%%  Version 0.23
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -12,6 +12,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.23, Dec 5th, 2017  
+%%%  scratch option causes the preamble pages not to show. Some improvement in dictionaries. 
 %%%  ver 0.22, Dec 4th, 2017
 %%%  some improvement in TOC. 
 %%%  ver 0.21, Dec 3th, 2017
@@ -23,8 +25,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/03}
-\def\qom@thesis@version{0.2}
+\def\qom@thesis@date{2017/12/05}
+\def\qom@thesis@version{0.23}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -32,6 +34,7 @@
 \newif\if@qom@print
 \newif\if@qom@index
 \newif\if@qom@debug
+\newif\if@qom@draft
 \newcount\qom@thesistype
 \newcount\qom@thesis@supervisor
 \newcount\qom@thesis@advisor
@@ -42,10 +45,10 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{xepersian}}
 \DeclareOption{print}{\@qom@printtrue}
-\DeclareOption{noprint}{\@qom@printfalse}
+\DeclareOption{scratch}{\@qom@drafttrue\@qom@printfalse}
 \DeclareOption{phd}{\qom@thesistype=\z@\relax} %default option 
-\DeclareOption{master}{\qom@thesistype=\@ne\relax}
-\DeclareOption{bachelor}{\qom@thesistype=\tw@\relax}
+\DeclareOption{ms}{\qom@thesistype=\@ne\relax}
+\DeclareOption{bs}{\qom@thesistype=\tw@\relax}
 \DeclareOption{index}{\@qom@indextrue}%
 \DeclareOption{debug}{\@qom@debugtrue}%
 \ProcessOptions\relax
@@ -269,7 +272,7 @@
 \RequirePackage[nottoc,notlot,notlof]{tocbibind}
 % This option make preparation for making index in the document
 \if@qom@index
-    \PassOptionsToPackage{quickindex-variant2}{xepersian}%
+    \PassOptionsToPackage{quickindex-variant1}{xepersian}%
     \RequirePackage{makeidx}%
     \makeindex%
 \fi    
@@ -283,6 +286,7 @@
 \else
     \PassOptionsToPackage{hyperref}{xcolor}
     \RequirePackage[
+    pagebackref,
     colorlinks=true, %% به جای استفاده از مربع قرمز دور موارد ارجاعی از لینک های رنگی استفاده کند.
     linkcolor=red, anchorcolor=green, citecolor=magenta, urlcolor=cyan, filecolor=magenta, %% رنگ برخی از لینک ها . 
     ]{hyperref}
@@ -818,12 +822,15 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\qomtitle}{%
 %%%%%%%%%%%%%%%% صفحهٔ سفید پس از جلد %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\if@qom@draft\else
 \begin{preamblepage}
     \vspace*{\fill}
     \textcolor{gray}{\hfill\tiny آماده‌ شده توسط کلاس \texttt{qom-thesis}، نسخهٔ \lr{\qom@thesis@version}}
 \end{preamblepage}
+\fi
 
 %%%%%%%%%%%%%%% صفحه بسم‌الله %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\if@qom@draft\else
 \begin{preamblepage}
     \begin{minipage}[c][\textheight][c]{\textwidth}%
     \centering
@@ -836,6 +843,7 @@ bookmarksnumbered = true
     ]{basmalah}
     \end{minipage}%
 \end{preamblepage}
+\fi
 %%%%%%%%%%%%%%% صفحه عنوان  %%%%%%%%%%%%%%%
 \begin{preamblepage}
     \begin{titlepage}
@@ -902,6 +910,7 @@ bookmarksnumbered = true
 \end{preamblepage}    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % برای پروژه کارشناسی نیازی به صفحات زیر نیست. 
+\if@qom@draft\else
 \ifnum\qom@thesistype<\tw@
 %%%%%%%%%%%%%%% صفحه تأییده داوران
 \refereeAck%
@@ -909,8 +918,10 @@ bookmarksnumbered = true
 \oathpage%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \fi    
+\fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%% صفحه تقدیم 
+\if@qom@draft\else
 \begin{preamblepage}
     \ifx\@dedicatedto\undefined%
     \else
@@ -918,7 +929,9 @@ bookmarksnumbered = true
         {\@dedicatedto}
     \fi
 \end{preamblepage}    
+\fi
 %%%%%%%%%%%%%%% صفحه نیایش 
+\if@qom@draft\else
 \begin{preamblepage}
     \ifx\@praise\undefined%
     \else
@@ -926,7 +939,9 @@ bookmarksnumbered = true
     {\@praise}
     \fi
 \end{preamblepage}    
+\fi
 %%%%%%%%%%%%%%% صفحه سپاسگزاری
+\if@qom@draft\else
 \begin{preamblepage}
     \ifx\@acknowledgement\undefined%
     \else
@@ -934,6 +949,7 @@ bookmarksnumbered = true
         {\@acknowledgement}
     \fi
 \end{preamblepage}
+\fi
 %%%%%%%%%%%%%%% صفحه چکیده
 \begin{preamblepage}
     \ifx\@abstract@persian\undefined%
@@ -948,8 +964,7 @@ bookmarksnumbered = true
         \ifx\@keywords@persian\undefined\else\@keywords@persian{}\fi}
     \fi
 \end{preamblepage}
-%%%%%%%%%%%%%%% صفحه
-}
+} %%%% end of qomtitle macro
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % دستورهایی برای سفارشی کردن صفحات اول فصل‌ها
 \newcommand\mycustomraggedright{%
@@ -1152,14 +1167,18 @@ bookmarksnumbered = true
 }
 \AtEndDocument{%
     %%%%%%%%%%%%%%%%%%%%%% Bibliography  %%%%%%%%%%%%%%%%%%%%%%%%%
+    \IfFileExists{references.bib}{%
     \begin{spacing}{1}
     \bibliographystyle{plain-fa}
     \small
     \bibliography{references}
     \end{spacing}
+    }%
+    {}
     %%%%%%%%%%%%%%%%%%%%%% Making Dictionary %%%%%%%%%%%%%%%%%%%%%%%%%
     \newif\if@qom@dicfatoen
     \newif\if@qom@dicentofa
+    \def\qom@Aa{ا}\def\qom@He{ه}%
     \newcommand\qom@makedic[1]{%
         \chapter*{#1}
         \markboth{#1}{#1}
@@ -1173,9 +1192,11 @@ bookmarksnumbered = true
             \def\qom@dicrow##1##2{\medskip##1\dotfill\dotfill\hbox{\lr{##2}}\par}%% fa2en
         \fi%
         \def\qom@dic@letter@space{\def\qom@dic@letter@space{\bigskip}}%
-        \def\qom@dic@letter@title##1{\qom@dic@letter@space\centerline{\normalfont\textbf{##1}}\nobreak}%   
+        \def\qom@dic@letter@title##1{%
+        \qom@dic@letter@space\centerline{\normalfont\textbf{##1}}\nobreak}%   
         \expandafter\gdef\expandafter\qom@trimtok##1=##2;\relax{\qom@dicrow{##1}{##2}}%
         \gdef\qom@trimmer##1{\expandafter\qom@trimtok ##1;\relax}%
+        \catcode\endlinechar=9 %
         \newread\qom@reader%
         \gdef\qom@letter{\relax}%
         \begingroup
@@ -1190,16 +1211,16 @@ bookmarksnumbered = true
                 \openin\qom@reader=dicfa2en.tex\relax%
             \fi%
             \loop%
-                \readline\qom@reader to \qom@data%
+                \read\qom@reader to \qom@data%
                 \unless\ifeof\qom@reader%
                     \qom@IfSubString{\qom@data}{=}%
                     \if@qom@TestSubString%
                         \edef\qom@dic@letter{\qom@firstletter{\qom@data}}%
+                        \ifx\qom@Aa\qom@dic@letter\def\qom@dic@letter{آ}\fi
+                        \ifx\qom@He\qom@dic@letter\def\qom@dic@letter{هـ}\fi
                         \ifx\qom@letter\qom@dic@letter\else%
-%                            \medskip
                             \edef\qom@letter{\qom@dic@letter}%
                             \qom@dic@letter@title{\qom@dic@letter}%
-%                            \lettergroup{\qom@dic@letter}
                         \fi%
                         \qom@trimmer{\qom@data}%
                     \fi%
