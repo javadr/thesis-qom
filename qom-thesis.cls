@@ -12,6 +12,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.24, Dec 6th, 2017  
+%%% definition of \lettergroup macro changed in coordination with style of fa2en dictionary . 
 %%%  ver 0.23, Dec 5th, 2017  
 %%%  scratch option causes the preamble pages not to show. Some improvement in dictionaries. 
 %%%  ver 0.22, Dec 4th, 2017
@@ -25,8 +27,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/05}
-\def\qom@thesis@version{0.23}
+\def\qom@thesis@date{2017/12/06}
+\def\qom@thesis@version{0.24}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -448,15 +450,15 @@ bookmarksnumbered = true
     \bidi@patchcmd{\@Abjad}{آ}{الف}
     {\typeout{Succeeded in changing `آ` into `الف`}}
     {\typeout{Failed in changing `آ` into `الف`}}
-    \bidi@patchcmd{\@Abjad}{ه}{هـ}
+    \bidi@patchcmd{\@Abjad}{ه}{ه‍}
     {\typeout{Succeeded in changing `ه` into `هـ`}}
     {\typeout{Failed in changing `ه` into `هـ`}}
     \bidi@patchcmd{\@harfi}{آ}{\hbox{الف}}
     {\typeout{Succeeded in changing `آ` into `الف`}}
     {\typeout{Failed in changing `آ` into `الف`}}
-    \bidi@patchcmd{\@harfi}{ه}{هـ}
-    {\typeout{Succeeded in changing `ه` into `هـ`}}
-    {\typeout{Failed in changing `ه` into `هـ`}}
+    \bidi@patchcmd{\@harfi}{ه}{ه‍}
+    {\typeout{Succeeded in changing `ه` into `ه‍`}}
+    {\typeout{Failed in changing `ه` into `ه‍`}}
     \PersianAlphs
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %% The following code is gotten from xepersian.sty, it set the baselineskip automaticly for persian fonts. 
@@ -1217,7 +1219,7 @@ bookmarksnumbered = true
                     \if@qom@TestSubString%
                         \edef\qom@dic@letter{\qom@firstletter{\qom@data}}%
                         \ifx\qom@Aa\qom@dic@letter\def\qom@dic@letter{آ}\fi
-                        \ifx\qom@He\qom@dic@letter\def\qom@dic@letter{هـ}\fi
+                        \ifx\qom@He\qom@dic@letter\def\qom@dic@letter{ه‍}\fi
                         \ifx\qom@letter\qom@dic@letter\else%
                             \edef\qom@letter{\qom@dic@letter}%
                             \qom@dic@letter@title{\qom@dic@letter}%
@@ -1244,6 +1246,21 @@ bookmarksnumbered = true
     \fi
     %%%%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%%%%%%
     \if@qom@index
+      \providecommand*\lettergroup[1]{%
+          \par%
+            \def\qom@lettergroup{#1}%
+             \ifx\qom@lettergroup\qom@Aa%
+                \textbf{آ}%
+             \else%
+                \ifx\qom@lettergroup\qom@He%
+                    \textbf{ه‍}%
+                 \else%
+                    \textbf{#1}%
+                \fi%
+            \fi%
+          \par%
+          \nopagebreak%
+      }%
         \printindex%
     \fi    
     %%%%%%%%%%%%%%%%%%%%%% English Abstract %%%%%%%%%%%%%%%%%%%%%%%%%
