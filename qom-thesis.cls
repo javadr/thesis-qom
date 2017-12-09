@@ -1,6 +1,6 @@
 %%%
 %%%  This is file `qom-thesis.cls',
-%%%  Version 0.23
+%%%  Version 0.26
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -12,6 +12,10 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.26, Dec 9th, 2017  
+%%%  There is no neeed to \mainmatter macro, it'll be set automatically by some hacks. 
+%%%  ver 0.25, Dec 6th, 2017  
+%%%  some other improvement in en2fa dictionary. https://tex.stackexchange.com/questions/404984
 %%%  ver 0.24, Dec 6th, 2017  
 %%% definition of \lettergroup macro changed in coordination with style of fa2en dictionary . 
 %%%  ver 0.23, Dec 5th, 2017  
@@ -27,8 +31,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/06}
-\def\qom@thesis@version{0.24}
+\def\qom@thesis@date{2017/12/09}
+\def\qom@thesis@version{0.26}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -37,6 +41,7 @@
 \newif\if@qom@index
 \newif\if@qom@debug
 \newif\if@qom@draft
+\newif\if@qom@preamble \@qom@preambletrue
 \newcount\qom@thesistype
 \newcount\qom@thesis@supervisor
 \newcount\qom@thesis@advisor
@@ -552,6 +557,7 @@ bookmarksnumbered = true
     \XeTeXcharclass `\; \qom@leftparen@charclass          
     \XeTeXcharclass `\: \qom@leftparen@charclass          
     \XeTeXcharclass `\. \qom@leftparen@charclass     
+    \XeTeXcharclass `\- \qom@leftparen@charclass       
     \ifdim\the\XeTeXversion\XeTeXrevision\p@>0.99993\p@
       \chardef\qom@alloc@intercharclass@top=4095
     \else
@@ -1073,7 +1079,13 @@ bookmarksnumbered = true
 %      \flushbottom
      \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}%\appendices
      \appendixtrue}
-    %  \bidi@epreto{\chapter}{\ifnum\c@chapter=0\mainmatter\fi}
+     %% The followings are hacks for not using \mainmatter macro by users. 
+      \bidi@preto{\chapter}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi}
+      \bidi@appto{\tableofcontents}{\@qom@preamblefalse}
+      \bidi@appto{\listoffigures}{\@qom@preamblefalse}
+      \bidi@appto{\listoftables}{\@qom@preamblefalse}
+      \bidi@appto{\lstlistoflistings}{\@qom@preamblefalse}
+      \bidi@appto{\listofsymbols}{\@qom@preamblefalse}
         \setlength{\parindent}{1cm}
         \setlength{\parskip}{0pt}
     %
@@ -1085,7 +1097,6 @@ bookmarksnumbered = true
     %%%\setcounter{page}{1}
     %%%\clearpage
     %%%\cleardoublepage
-    %%%}
     \pagenumbering{roman}
     \qomtitle
     \frontmatter
@@ -1218,6 +1229,7 @@ bookmarksnumbered = true
                     \qom@IfSubString{\qom@data}{=}%
                     \if@qom@TestSubString%
                         \edef\qom@dic@letter{\qom@firstletter{\qom@data}}%
+                        \uppercase\expandafter{\expandafter\edef\expandafter\qom@dic@letter\expandafter{\qom@dic@letter}} %https://tex.stackexchange.com/questions/404984
                         \ifx\qom@Aa\qom@dic@letter\def\qom@dic@letter{آ}\fi
                         \ifx\qom@He\qom@dic@letter\def\qom@dic@letter{ه‍}\fi
                         \ifx\qom@letter\qom@dic@letter\else%
