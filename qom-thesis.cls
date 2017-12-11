@@ -1,6 +1,6 @@
 %%%
 %%%  This is file `qom-thesis.cls',
-%%%  Version 0.26
+%%%  Version 0.28
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -12,6 +12,11 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.28, Dec 11th, 2017  
+%%%  Final improvement in setting digits' font to Yas font; it'll be done with the aid of some xetex interal macros. 
+%%%  Thanks to Vafa Khalighi for his draft in doing such an action automatically. 
+%%%  ver 0.27, Dec 10th, 2017  
+%%%  Another improvement in sophisticated main matter page numbering.
 %%%  ver 0.26, Dec 9th, 2017  
 %%%  There is no neeed to \mainmatter macro, it'll be set automatically by some hacks. 
 %%%  ver 0.25, Dec 6th, 2017  
@@ -22,17 +27,17 @@
 %%%  scratch option causes the preamble pages not to show. Some improvement in dictionaries. 
 %%%  ver 0.22, Dec 4th, 2017
 %%%  some improvement in TOC. 
-%%%  ver 0.21, Dec 3th, 2017
+%%%  ver 0.21, Dec 3rd, 2017
 %%%  adding \strut to \RTL and \LTR command, for solving http://qa.parsilatex.com/28105 by vafa khalighi. 
 %%% Some improvement in dictionaries code. 
-%%%  ver 0.2, Dec 3th, 2017
+%%%  ver 0.2, Dec 3rd, 2017
 %%%  Dictionary files are automatically read from the dicfa2en.tex and dicen2fa.tex. 
 %%%  ver 0.1, Nov 12th, 2017
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/09}
-\def\qom@thesis@version{0.26}
+\def\qom@thesis@date{2017/12/11}
+\def\qom@thesis@version{0.28}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -79,8 +84,8 @@
 \define@key{qomthesis}{رشته}{\def\@major{#1}}
 \define@key{qomthesis}{گرایش}{\def\@field{#1}}
 \define@key{qomthesis}{گرايش}{\def\@field{#1}}
-\define@key{qomthesis}{تاریخ تحویل}{\def\@submissiondate{#1}}
-\define@key{qomthesis}{تاريخ تحويل}{\def\@submissiondate{#1}}
+\define@key{qomthesis}{تاریخ اتمام}{\def\@submissiondate{#1}}
+\define@key{qomthesis}{تاريخ اتمام}{\def\@submissiondate{#1}}
 \define@key{qomthesis}{faculty}{\def\@faculty@english{#1}}
 \define@key{qomthesis}{department}{\def\@department@english{#1}}
 \define@key{qomthesis}{major}{\def\@major@english{#1}}
@@ -260,7 +265,6 @@
 %
 \RequirePackage[inline]{enumitem}
 \setlist{noitemsep}
-\RequirePackage{tabularx}
 \RequirePackage{booktabs}
 %
 \RequirePackage{emptypage}
@@ -502,7 +506,7 @@ bookmarksnumbered = true
      \ifnum\qom@tcl<1792\repeat
      \advance\qom@strutilg\qom@ilg
     }
-
+%    
     \bidi@patchcmd{\set@fontsize}{%
     \baselineskip\f@baselineskip\relax
     }{%
@@ -517,18 +521,10 @@ bookmarksnumbered = true
         \footnotesep.7\baselineskip
       \fi
      \fi
-    }{}{}    
+    }{}{}   
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% because of computeautoilg the following patch sould be appended to make doc more beautiful.
-        \@ifpackagelater{bidi}{2017/12/02}{} 
-        {%before  ver. 31.6
-%\bidi@BeforeBeginEnvironment{latin}{\if@nonlatin\medskip\fi}    
-%\bidi@BeforeBeginEnvironment{LTR}{\if@nonlatin\medskip\fi}    
-%        \bidi@appto\RTL{\parshape\z@\strut}
-%        \bidi@appto\LTR{\parshape\z@\strut}
-%\def\RTL{\par\@RTLtrue\@RTL@footnotetrue\hsize\linewidth\parshape\z@\strut}
-%\def\LTR{\par\@RTLfalse\@RTL@footnotefalse\hsize\linewidth\parshape\z@\strut}
-        }
+%%% because of computeautoilg the changing from RTL to LTR causes a little space. in this case user can use below macro. 
+    \def\bigpar{\par\medskip}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
     \if@bidi@csundef{bidi@digits}{% 
@@ -550,7 +546,7 @@ bookmarksnumbered = true
     \XeTeXcharclass `\{ \qom@leftparen@charclass
     \XeTeXcharclass `\} \qom@rightparen@charclass
     \XeTeXcharclass `\« \qom@leftparen@charclass
-    \XeTeXcharclass `\» \qom@rightparen@charclass       
+    \XeTeXcharclass `\» \qom@rightparen@charclass
     \XeTeXcharclass `\، \qom@leftparen@charclass    
     \XeTeXcharclass `\, \qom@leftparen@charclass
     \XeTeXcharclass `\؛ \qom@leftparen@charclass          
@@ -574,12 +570,12 @@ bookmarksnumbered = true
     \XeTeXinterchartoks \bidi@digits@charclass \qom@CharNormal = {\EndSwitchDigitFont}     
     \if@bidi@csundef{if@nonlatin}{%
         \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
-        \global\edef\currentfont{\the\font}\if@Latin\else\yasfont \fi\fi}
-        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@Latin\else\currentfont \fi\fi}
+        \global\edef\currentfont{\the\font}\if@Latin\else\bgroup\yasfont \fi\fi}
+        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@Latin\else\egroup\currentfont \fi\fi}
     }{%
         \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
-        \global\edef\currentfont{\the\font}\if@nonlatin\yasfont \fi\fi}
-        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@nonlatin\currentfont \fi\fi}
+        \global\edef\currentfont{\the\font}\if@nonlatin\bgroup\yasfont \fi\fi}
+        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@nonlatin\egroup\currentfont \fi\fi}
     }
     \if@qom@debug
     \AtBeginShipout{%
@@ -1039,15 +1035,6 @@ bookmarksnumbered = true
 %\newtheorem{remark}{ملاحظه}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \AtBeginDocument{%
-    % Sophisticated front matter page-numbering
-    %\pagenumbering{roman}
-    %\let\old@chapter\@chapter
-    %\def\@chapter{%
-    %    \ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi
-    %  \old@chapter}
-    %
-    %\bidi@appto\chapter{%\typeout{@@@@@@@@@@\the\c@chapter @@@@@@@@@@@}
-    %\ifnum\c@chapter=0 \pagenumbering{arabic}\setcounter{page}{1}\fi}
     \def\@makechapterhead#1{%
       \vspace*{50\p@}%
       {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi \normalfont
@@ -1063,8 +1050,6 @@ bookmarksnumbered = true
         \Huge \bfseries #1\par\nobreak
         \vskip 40\p@
         \nobreak
-    %    \thispagestyle{empty}
-    %    \newpage
       }}
     \def\@makeschapterhead#1{%
       \vspace*{50\p@}%
@@ -1074,29 +1059,26 @@ bookmarksnumbered = true
         \Huge \bfseries  #1\par\nobreak
         \vskip 40\p@
         \thispagestyle{empty}
-    %%    \newpage
       }}  
-%      \flushbottom
      \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}%\appendices
      \appendixtrue}
      %% The followings are hacks for not using \mainmatter macro by users. 
-      \bidi@preto{\chapter}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi}
+     %% Sophisticated front matter page-numbering
+%      \bidi@preto{\chapter}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi}
+%      \bidi@patchcmd{\@chapter}{\if@mainmatter}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\global\mainmatter\fi\fi\fi\if@mainmatter}{}{}
+      \bidi@patchcmd{\secdef}{\@dblarg}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi\@dblarg}{}{}
       \bidi@appto{\tableofcontents}{\@qom@preamblefalse}
       \bidi@appto{\listoffigures}{\@qom@preamblefalse}
       \bidi@appto{\listoftables}{\@qom@preamblefalse}
       \bidi@appto{\lstlistoflistings}{\@qom@preamblefalse}
       \bidi@appto{\listofsymbols}{\@qom@preamblefalse}
+      \bidi@appto{\endacronym}{\@qom@preamblefalse}
         \setlength{\parindent}{1cm}
         \setlength{\parskip}{0pt}
     %
     %\setlength{\footskip}{
     %\paperheight   -(1in+\voffset+\topmargin+\headheight+\headsep+\textheight)  -1cm
     %}
-    %%%\bidi@appto\tableofcontents{%
-    %%%\pagenumbering{arabic}
-    %%%\setcounter{page}{1}
-    %%%\clearpage
-    %%%\cleardoublepage
     \pagenumbering{roman}
     \qomtitle
     \frontmatter
