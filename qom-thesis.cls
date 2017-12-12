@@ -1,6 +1,6 @@
 %%%
 %%%  This is file `qom-thesis.cls',
-%%%  Version 0.28
+%%%  Version 0.3
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -12,6 +12,10 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.3, Dec 12th, 2017 
+%%%  \listofsymbols macro is defined with the aid of Vahid Damanafshan. 
+%%%  ver 0.29, Dec 11th, 2017 
+%%%  scratch option replaced by final 
 %%%  ver 0.28, Dec 11th, 2017  
 %%%  Final improvement in setting digits' font to Yas font; it'll be done with the aid of some xetex interal macros. 
 %%%  Thanks to Vafa Khalighi for his draft in doing such an action automatically. 
@@ -36,8 +40,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/11}
-\def\qom@thesis@version{0.28}
+\def\qom@thesis@date{2017/12/12}
+\def\qom@thesis@version{0.3}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -45,7 +49,7 @@
 \newif\if@qom@print
 \newif\if@qom@index
 \newif\if@qom@debug
-\newif\if@qom@draft
+\newif\if@qom@draft\@qom@drafttrue
 \newif\if@qom@preamble \@qom@preambletrue
 \newcount\qom@thesistype
 \newcount\qom@thesis@supervisor
@@ -57,7 +61,7 @@
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{xepersian}}
 \DeclareOption{print}{\@qom@printtrue}
-\DeclareOption{scratch}{\@qom@drafttrue\@qom@printfalse}
+\DeclareOption{final}{\@qom@draftfalse\@qom@printfalse}
 \DeclareOption{phd}{\qom@thesistype=\z@\relax} %default option 
 \DeclareOption{ms}{\qom@thesistype=\@ne\relax}
 \DeclareOption{bs}{\qom@thesistype=\tw@\relax}
@@ -228,6 +232,35 @@
 }%
 \def\qom@firstletter#1{\expandafter\qom@justfirst#1\relax}
 \def\qom@justfirst#1#2\relax{#1}
+%%%%%%%%%% list of symbols macros%%%%%%%%%%%%%%
+\newcommand{\addsymbol}[3]{%
+    \gdef\currntsymbol{#2}%
+    \gdef\currntsymboldef{#3}%
+    \expandafter\gdef\csname qom@symb@short@#1\endcsname{#2}%
+    \expandafter\gdef\csname qom@symb@long@#1\endcsname{#3}
+    \addcontentsline{los}{addsymbol}{%
+        \protect\numberline{\currntsymbol}%
+        \currntsymboldef%
+    }%
+}
+\newcommand\sym[1]{\expandafter{\csname qom@symb@long@#1\endcsname}%
+\space(\expandafter{\csname qom@symb@short@#1\endcsname})}
+\newcommand\syms[1]{\expandafter{\csname qom@symb@short@#1\endcsname}}
+\newcommand\syml[1]{\expandafter{\csname qom@symb@long@#1\endcsname}}
+\renewcommand\@tocrmarg{1.55em}
+\newcommand\listsymbolsname{فهرست نمادها}
+\newcommand\listofsymbols[1][3em]{%
+    \newcommand*\l@addsymbol{\@dottedtocline{1}{0em}{#1}}
+    \chapter*{\listsymbolsname}%
+    \markboth{\listsymbolsname}{\listsymbolsname}%
+    \setlength{\columnsep}{5ex}
+    \begin{multicols*}{2}
+        \small
+        \@starttoc{los}
+        \raggedcolumns
+    \end{multicols*}
+}
+%%%%%%%%%% end of list of symbols macros%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%End of Some Macros for Internal Use %%%%%%%%%%%%%%%%
 %%%%%%%%%  Packages  %%%%%%%%%%%%%%%%%
 %
@@ -617,11 +650,11 @@ bookmarksnumbered = true
 {\thispagestyle{empty}}% at the end of  environment
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\pagetitle#1{%
-\vspace*{3cm}
+\vspace*{2.2cm}
 \begingroup\if@Kashida@on\KashidaOff\fi
 \nastaliq #1
 \endgroup
-\vspace*{2cm}\par
+\vspace*{1.4cm}\par
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\renewenvironment{abstract}{
@@ -658,11 +691,11 @@ bookmarksnumbered = true
     {\ifx\@major\undefined\qom@dotline{مهندسی کامپیوتر}\else\bfseries\@major\fi{} }
     {\ifx\@field\undefined\else گرایش \bfseries\@field\fi }
     که در تاریخ 
-    {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\@defensedate\fi{} }
+    {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\LR{\@defensedate}\fi{} }
     از \Thesis{}  خود تحت عنوان:\\
     \centerline{\ifx\@title@persian\undefined\qom@dotlined{7cm}\else\bfseries«\@title@persian»\fi}
     با کسب نمره  با عدد: 
-    {\ifx\@grade\undefined\qom@dotline{۱۹/۲۵}\else\bfseries\@grade\fi{} }
+    {\ifx\@grade\undefined\qom@dotline{۱۹/۲۵}\else\bfseries\LR{$\mathbf{\@grade}$}\fi{} }
     با حروف: 
     {\ifx\@grade@letters\undefined\qom@dotline{نوزده و بیست و پنج صدم تمام}\else\bfseries\@grade@letters\fi}
      و با درجه 
@@ -731,11 +764,11 @@ bookmarksnumbered = true
      تحت عنوان 
      {\ifx\@title@persian\undefined\qom@dotlined{9cm}\else\bfseries\@title@persian\fi}
      با حضور هیأت داوران در محل دانشگاه قم در تاریخ 
-    {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\@defensedate\fi{} }
+    {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\LR{\@defensedate}\fi{} }
      تشکیل گردید. 
      
      در این جلسه، \Thesis{} با نمره (به عدد  
-     {\bfseries\ifx\@grade\undefined\ldots\ldots\ldots\else\@grade\fi}{،}
+     {\bfseries\ifx\@grade\undefined\ldots\ldots\ldots\else\LR{$\mathbf{\@grade}$}\fi}{،}
       به حروف
       {\bfseries\ifx\@grade@letters\undefined\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\else\@grade@letters\fi})    و \linebreak
         با درجه عالی ~%
@@ -978,10 +1011,6 @@ bookmarksnumbered = true
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bidi@AfterPackage{xepersian}{%
 \SepMark{-}
-%\renewcommand{\بخش}{\section} 
-%\eqcommand{subfigure}{subfloat} 
-%\eqcommand{ذم}{cite} 
-%\eqcommand{ر}{ref} 
 % دستوری برای حذف کلمه «چکیده»
 \renewcommand{\abstractname}{}
 % دستوری برای حذف کلمه «abstract»
@@ -1011,7 +1040,7 @@ bookmarksnumbered = true
 %% با دستور newtheorem یک نوع از استایلی که در بالای آن تعریف شده است ایجاد می کنیم. 
 % تعریف و نحوه ظاهر شدن عنوان قضیه‌ها، تعریف‌ها، مثال‌ها و ...
 \theoremstyle{definition}
-\newtheorem{definition}{تعریف}[section]
+\newtheorem{definition}{تعریف}[chapter]
 \newtheorem{example}[definition]{مثال}
 \theoremstyle{plain}
 \newtheorem{theorem}[definition]{قضیه}
