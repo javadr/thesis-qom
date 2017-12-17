@@ -1,6 +1,6 @@
 %%%
 %%%  This is file `qom-thesis.cls',
-%%%  Version 0.3
+%%%  Version 0.31
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -12,6 +12,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.31, Dec 12th, 2017 
+%%%  some little change in toc style
 %%%  ver 0.3, Dec 12th, 2017 
 %%%  \listofsymbols macro is defined with the aid of Vahid Damanafshan. 
 %%%  ver 0.29, Dec 11th, 2017 
@@ -40,8 +42,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/12}
-\def\qom@thesis@version{0.3}
+\def\qom@thesis@date{2017/12/17}
+\def\qom@thesis@version{0.31}
 \ProvidesClass{qom-thesis}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -306,8 +308,8 @@
 \RequirePackage{fancyhdr}
 \RequirePackage[titles, subfigure]{tocloft}
 \addtolength{\cftchapnumwidth}{10pt}
-\addtolength{\cftsecnumwidth}{10pt}
-\addtolength{\cftsubsecnumwidth}{10pt}      
+\addtolength{\cftsecnumwidth}{12pt}
+\addtolength{\cftsubsecnumwidth}{14pt}      
 
 % بسته‌ای برای ظاهر شدن «مراجع»  در فهرست مطالب 
 %nottoc Disables the inclusion of the ToC.
@@ -1079,6 +1081,7 @@ bookmarksnumbered = true
         \Huge \bfseries #1\par\nobreak
         \vskip 40\p@
         \nobreak
+        \thispagestyle{empty}
       }}
     \def\@makeschapterhead#1{%
       \vspace*{50\p@}%
