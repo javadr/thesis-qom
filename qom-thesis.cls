@@ -1,18 +1,21 @@
 %%%
 %%%  This is file `qom-thesis.cls',
-%%%  Version 0.31
+%%%  Version 0.32
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
 %%%   __________________________________
 %%%
-%%%   Copyright © 2017 Seiied-Mohammad-Javad Razavian
+%%%   Copyright © 2017-2018 Seiied-Mohammad-Javad Razavian
 %%%  
 %%%   http://www.parsilatex.com  
 %%%   __________________________________
 %%%   
 %%%  Change Log:
-%%%  ver 0.31, Dec 12th, 2017 
+%%%  ver 0.32,  Jan 2nd, 2018
+%%%  after bidi ver 30.2 and xepersian ver 20.1 ther is no need so adjust text digit font in the style, 
+%%%  because those packages do it as desirable. These updates happened in  January 1st, 2018. 
+%%%  ver 0.31, Dec 17th, 2017 
 %%%  some little change in toc style
 %%%  ver 0.3, Dec 12th, 2017 
 %%%  \listofsymbols macro is defined with the aid of Vahid Damanafshan. 
@@ -495,8 +498,8 @@ bookmarksnumbered = true
     {\typeout{Succeeded in changing `آ` into `الف`}}
     {\typeout{Failed in changing `آ` into `الف`}}
     \bidi@patchcmd{\@Abjad}{ه}{ه‍}
-    {\typeout{Succeeded in changing `ه` into `هـ`}}
-    {\typeout{Failed in changing `ه` into `هـ`}}
+    {\typeout{Succeeded in changing `ه` into `ه‍`}}
+    {\typeout{Failed in changing `ه` into `ه‍`}}
     \bidi@patchcmd{\@harfi}{آ}{\hbox{الف}}
     {\typeout{Succeeded in changing `آ` into `الف`}}
     {\typeout{Failed in changing `آ` into `الف`}}
@@ -562,6 +565,8 @@ bookmarksnumbered = true
     \def\bigpar{\par\medskip}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
+     % با توجه به بروزرسانی بسته‌های بی‌دی نسخه ۳۰.۲ و زی‌پرشین نسخه ۲۰.۱ دیگر نیازی به کدهای زیر نیست لکن در نسخه‌های قبلی بکار می‌آید. 
+\@ifpackagelater{bidi}{2018/01/01}{}{\@ifpackagelater{xepersian}{2018/01/01}{}{
     \if@bidi@csundef{bidi@digits}{% 
         \newcount\bidi@digits
         \XeTeXinterchartokenstate=\@ne
@@ -612,6 +617,7 @@ bookmarksnumbered = true
         \global\edef\currentfont{\the\font}\if@nonlatin\bgroup\yasfont \fi\fi}
         \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@nonlatin\egroup\currentfont \fi\fi}
     }
+}} % end of  ifpackagelater{bidi} and ifpackagelater{xepersian}
     \if@qom@debug
     \AtBeginShipout{%
       \AtBeginShipoutUpperRight{%
@@ -1154,6 +1160,8 @@ bookmarksnumbered = true
     \newcount\My@Alphabets
     \newXeTeXintercharclass\MyAlphabets
     \newXeTeXintercharclass\MyPunctuations
+    \newXeTeXintercharclass\qom@dot@charclass
+    \XeTeXcharclass `\. \qom@dot@charclass
     \XeTeXcharclass`\{\MyPunctuations
     \XeTeXcharclass`\}\MyPunctuations
     \XeTeXcharclass`\[\MyPunctuations
@@ -1176,7 +1184,7 @@ bookmarksnumbered = true
     \My@Alphabets=`\a \loop \XeTeXcharclass \My@Alphabets=\MyAlphabets \ifnum\My@Alphabets<`\z \advance\My@Alphabets \@ne \repeat
     \XeTeXinterchartoks \MyAlphabets 4095 = {\PrintWordCount}
     \XeTeXinterchartoks \MyAlphabets \MyPunctuations = {\PrintWordCount}
-    \XeTeXinterchartoks \MyAlphabets \bidi@dot@charclass = {\PrintWordCount}
+    \XeTeXinterchartoks \MyAlphabets \qom@dot@charclass = {\PrintWordCount}
     \newcommand*{\PrintWordCount}{%\raise.4\baselineskip
     \llap{\tiny\global\advance\WordCount\@ne\textcolor{red}{}%{\the\WordCount}
     }}
