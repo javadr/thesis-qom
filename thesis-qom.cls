@@ -1,6 +1,4 @@
-%%%
-%%%  This is file `qom-thesis.cls',
-%%%  Version 0.32
+%%%  Version 0.33
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -12,8 +10,10 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.33,  Feb 4th, 2018
+%%%  The style is called thesis-qom by know. 
 %%%  ver 0.32,  Jan 2nd, 2018
-%%%  after bidi ver 30.2 and xepersian ver 20.1 ther is no need so adjust text digit font in the style, 
+%%%  After bidi ver 30.2 and xepersian ver 20.1 ther is no need so adjust text digit font in the style, 
 %%%  because those packages do it as desirable. These updates happened in  January 1st, 2018. 
 %%%  ver 0.31, Dec 17th, 2017 
 %%%  some little change in toc style
@@ -45,9 +45,9 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2017/12/17}
-\def\qom@thesis@version{0.31}
-\ProvidesClass{qom-thesis}[%
+\def\qom@thesis@date{2018/02/04}
+\def\qom@thesis@version{0.33}
+\ProvidesClass{thesis-qom}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
 ]
@@ -479,7 +479,7 @@ bookmarksnumbered = true
 %    \DeclareMathSizes{12}{13}{12}{11}  % For size 12 text
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \newsavebox\qom@thesis@proof@box
-    \sbox{\qom@thesis@proof@box}{\textcolor{gray}{\hboxR{\tiny آماده‌ شده توسط کلاس \texttt{qom-thesis}، نسخهٔ \lr{\qom@thesis@version}}}}
+    \sbox{\qom@thesis@proof@box}{\textcolor{gray}{\hboxR{\tiny آماده‌ شده توسط کلاس \texttt{thesis-qom}، نسخهٔ \lr{\qom@thesis@version}}}}
     \newdimen\qom@thesis@proof@box@dim@ht
     \newdimen\qom@thesis@proof@box@dim@wd
     \qom@thesis@proof@box@dim@wd=\wd\qom@thesis@proof@box
@@ -870,7 +870,7 @@ bookmarksnumbered = true
 \if@qom@draft\else
 \begin{preamblepage}
     \vspace*{\fill}
-    \textcolor{gray}{\hfill\tiny آماده‌ شده توسط کلاس \texttt{qom-thesis}، نسخهٔ \lr{\qom@thesis@version}}
+    \textcolor{gray}{\hfill\tiny آماده‌ شده توسط کلاس \texttt{thesis-qom}، نسخهٔ \lr{\qom@thesis@version}}
 \end{preamblepage}
 \fi
 
@@ -1405,4 +1405,4 @@ bookmarksnumbered = true
 %%   ____________________________________________________________________
 %% Special thanks to Vafa Khalighi for the XePersian Package.
 %% This work is supported by University of Qom.
-%% End of file `qom-thesis.cls'.	
+%% End of file `thesis-qom.cls'.	

@@ -1,0 +1,42 @@
+\documentclass[index, final,]{thesis-qom}
+
+\usepackage{amscd}
+\usepackage{fancyvrb}
+\fvset{fontsize=\small}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[obeyDraft]{todonotes}
+\usepackage{subfigure}
+\usepackage{bidipoem} % حروفچینی شعر نو و سنتی
+\usepackage[printonlyused,withpage]{acronym} % دستورات لازمه برای درج نمادها در این بسته قرار دارد. 
+\usepackage{tabularx}
+
+\include{settings}
+
+\begin{document}
+
+\setmathsfdigitfont{IRTitr}
+
+\input{chapters/preface}
+
+\tableofcontents % فهرست مطالب
+% در صورتیکه به هر یک از موارد ذیل نیازی نبود می‌تواند با گذاشتن یک % در ابتدای آن سطر آن را غیر فعال نمایید. 
+\listoffigures % فهرست تصاویر
+\listoftables % فهرست جداول
+\listofsymbols % فهرست نمادها
+\lstlistoflistings % فهرست برنامه‌ها
+
+
+\include{chapters/intro} % chapter 1
+\include{chapters/qomthesis-guide} % chapter 2
+\include{chapters/latexCommands} % chapter 3
+\include{chapters/bib-index} % chapter 4
+%\include{chapters/correctWriting}  % chapter 5
+%\include{chapters/realSample} % chapter 6
+
+\appendix
+\include{chapters/installation} % appendix 1
+\include{chapters/morelatex} % appendix 2
+
+\end{document} 
