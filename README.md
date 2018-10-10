@@ -1,1 +1,1 @@
-# qom-thesis
+# thesis-qom
