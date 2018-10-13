@@ -1,4 +1,4 @@
-%%%  Version 0.33
+%%%  Version 0.4
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -10,6 +10,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.4,  Oct 12th, 2018
+%%%  The new version is adapted with bidi ver 34.5 and bidi ver 21.6; in this new version extrafootnotefeatures have many extra features than to past, as a result there is no need to patch footnotes. 
 %%%  ver 0.33,  Feb 4th, 2018
 %%%  The style is called thesis-qom by know. 
 %%%  ver 0.32,  Jan 2nd, 2018
@@ -45,8 +47,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2018/02/04}
-\def\qom@thesis@version{0.33}
+\def\qom@thesis@date{2018/10/12}
+\def\qom@thesis@version{0.4}
 \ProvidesClass{thesis-qom}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -65,8 +67,8 @@
 \newcount\qom@thesis@referee@external
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{xepersian}}
-\DeclareOption{print}{\@qom@printtrue}
 \DeclareOption{final}{\@qom@draftfalse\@qom@printfalse}
+\DeclareOption{print}{\@qom@printtrue}
 \DeclareOption{phd}{\qom@thesistype=\z@\relax} %default option 
 \DeclareOption{ms}{\qom@thesistype=\@ne\relax}
 \DeclareOption{bs}{\qom@thesistype=\tw@\relax}
@@ -358,10 +360,19 @@ bookmarksnumbered = true
 % فراخوانی بسته زی‌پرشین و تعریف قلم فارسی و انگلیسی
 %\RequirePackage{bidipoem}
 \bidi@AtEndPreamble{%
-    \usepackage[para*]{manyfoot}
-    \SetFootnoteHook{\setLTR}
-    \DeclareNewFootnote[para]{A}
-    \RequirePackage[extrafootnotefeatures,]{xepersian}
+%    \usepackage[para*]{manyfoot}
+%    \SetFootnoteHook{\setLTR}
+%    \DeclareNewFootnote[para]{A}
+    \RequirePackage[extrafootnotefeatures,Kashida, computeautoilg]{xepersian}[2018/10/06] %ver 21.6 and upper 
+    \@ifpackagelater{xepersian}{2018/10/06}{}{%
+    \typeout{}
+    \typeout{############## FATAL ERROR ##############}
+    \ClassError{thesis-qom}{You must update your TeX distribution; \MessageBreak 
+        This version of thesis-qom just works \MessageBreak with xepersian ver 21.6 or upper
+    }{if you have no time to update your TeX distribution,\MessageBreak do use there-qom version 0.34 or below.}
+    \end{document}
+    } 
+    \normalRTLparaLTRfootnotes*
     % in case of Kashida=off option, because nastaliq font has no support for kashida and the code needs to know about that. 
     \if@bidi@csundef{if@Kashida@on}{\newif\if@Kashida@on}{}
     % See http://qa.parsilatex.com/7884 for details
@@ -372,91 +383,14 @@ bookmarksnumbered = true
     \settextfont[Scale=1.12,]{XB Niloofar} %scale adopted with respect to XB Zar font.  
     \setdigitfont[Scale=1]{Yas}
 %%    \setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman
-%%%%%% http://qa.parsilatex.com/28063; 
-        \@ifpackagelater{xepersian}{2017/11/30}{} 
-        {%before  ver. 19.4
-        \everydisplay\expandafter{%
-            \the\everydisplay\SetDisplayMathsDigits%
-            \let\SetInlineMathsDigits\relax%
-        }}
-%%%%%% %%%%%% %%%%%% %%%%    
-%% \doublespacing causes some bad effect in setting yasfont for digits.
-%\renewcommand{\setstretch}[1]{%
-%  \def\baselinestretch{#1}%
-%  \@currsize
-%}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \@ifpackageloaded{listings}{
-    \@ifpackagelater{xepersian}{2016/09/14}
-      {% Do something for the newer version
         \lstset{ 
             basicstyle=\setLTR\@nonlatinfalse\footnotesize\ttfamily, % from xepersian ver. 16.8
             captiondirection=RTL, captionscript=nonlatin,
         }
-      }
-      {% Do something different for the older version
-        \lstset{    
-            basicstyle=\setLTR\@Latintrue\footnotesize\ttfamily,
-            captiondirection=RTL,
-        }
-        \bidi@appto\lstlistingname{\setLTR\@Latinfalse} % before xepersian ver. 16.7
-      }%
 }{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%  The following code causes the english footnotes will be typeset in paragraph mode wile the perian one typeset in ordinary way. 
-    % بر گرفته از استایل مجله ریاضی و جامعه 
-    \let\c@footnoteA\c@footnote
-    \let\LTRfootnote\footnoteA
-    \renewcommand*{\@makefnmark}{\hbox{\@textsuperscript{\scriptsize\@thefnmark}}}
-      \def\MFL@fnotepara#1#2#3{\let\@thefnmark\@empty
-        \NCC@makefnmark{\latinfont #2}%
-        \MFL@insert#1{\reset@font\footnotesize
-          \ifx\@thefnmark\@empty \@tempswafalse \else
-            \@tempswatrue
-            \protected@edef\@currentlabel{\@thefnmark}%
-          \fi
-          \color@begingroup
-            \if@tempswa
-              \setbox\@tempboxa\hbox{\@makefnmark}%
-              \ifMFL@paraindent
-                \@tempdima.8em \advance\@tempdima-\wd\@tempboxa
-                \ifdim \@tempdima<\z@ \@tempdima\z@ \fi
-              \else
-                \@tempdima\z@
-              \fi
-            \fi
-            \setbox\@tempboxa\hbox{%
-              \if@tempswa
-                \hskip\@tempdima\unhbox\@tempboxa\nobreak
-              \fi
-              \ignorespaces\resetlatinfont#3\unskip\strut
-              \ifMFL@split \penalty\m@ne\space \else
-                \penalty-10 \hskip\footglue
-              \fi
-            }%
-            \dp\@tempboxa\z@ \ht\@tempboxa\MFL@fudgefactor\wd\@tempboxa
-            \box\@tempboxa
-          \color@endgroup
-        }%
-      }
-    \long\def\@footnotetext#1{\insert\footins{%
-       \if@RTL@footnote\@RTLtrue\else\@RTLfalse\fi%
-        \reset@font\footnotesize%\tiny
-        \interlinepenalty\interfootnotelinepenalty
-        \splittopskip\footnotesep
-        \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
-        \hsize\columnwidth \@parboxrestore
-        \protected@edef\@currentlabel{%
-           \csname p@footnote\endcsname\@thefnmark
-        }%
-        \color@begingroup
-          \@makefntext{%
-            \rule\z@\footnotesep\ignorespaces\if@RTL@footnote#1\else\latinfont#1\fi\@finalstrut\strutbox}%
-        \color@endgroup}}%
-    %\footdir@temp\footdir@my@ORG@xepersian@footnotetext\@footnotetext{\bidi@footdir@footnote}%
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%    \paragraphfootnotes
-    \setlength{\footmarkwidth}{0pt}
     % تعریف قلم‌های فارسی و انگلیسی اضافی برای استفاده در بعضی از قسمت‌های متن
     \defpersianfont\nastaliq[Language=Default,Scale=2.5,AutoFakeBold]{IranNastaliq}
     \defpersianfont\chapternumber[Language=Default,Scale=1.5,BoldFont={IRlotus}]{IRLotus}
@@ -507,117 +441,9 @@ bookmarksnumbered = true
     {\typeout{Succeeded in changing `ه` into `ه‍`}}
     {\typeout{Failed in changing `ه` into `ه‍`}}
     \PersianAlphs
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %% The following code is gotten from xepersian.sty, it set the baselineskip automaticly for persian fonts. 
-    \newcount\qom@tcl
-    \newdimen\qom@ilg
-    \newdimen\qom@strutilg
-    \chardef\f@ur=4
-    \newcommand*{\qom@computeautoilg}{% compute the interline glue
-     \qom@tcl=1536\qom@ilg\z@\qom@strutilg\z@
-     \loop
-     \iffontchar\font\qom@tcl
-     \ifdim\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl>\z@
-     \ifdim\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl>\qom@ilg
-       \qom@ilg=\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl
-     \fi
-     \else
-     \ifdim\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl<\z@
-      \ifdim-\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl>\qom@ilg
-       \qom@ilg=-\XeTeXglyphbounds\tw@ \the\XeTeXcharglyph\qom@tcl
-     \fi
-     \fi
-     \fi
-     \ifdim\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl>\z@
-     \ifdim\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl>\qom@strutilg
-       \qom@strutilg=\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl
-     \fi
-     \else
-     \ifdim\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl<\z@
-      \ifdim-\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl>\qom@strutilg
-       \qom@strutilg=-\XeTeXglyphbounds\f@ur \the\XeTeXcharglyph\qom@tcl
-     \fi
-     \fi
-     \fi
-     \fi
-     \advance\qom@tcl\@ne
-     \ifnum\qom@tcl<1792\repeat
-     \advance\qom@strutilg\qom@ilg
-    }
-%    
-    \bidi@patchcmd{\set@fontsize}{%
-    \baselineskip\f@baselineskip\relax
-    }{%
-    \baselineskip\f@baselineskip\relax
-    \qom@computeautoilg
-     \ifdim\qom@strutilg>\baselineskip
-      \PackageInfo{xepersian}{character with height+depth greater than current baselineskip found in font}%
-      \PackageInfo{xepersian}{baselineskip changed to that height+depth!}%
-      \baselineskip\qom@strutilg
-      \ifdim\footnotesep=.7\baselineskip
-      \else
-        \footnotesep.7\baselineskip
-      \fi
-     \fi
-    }{}{}   
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% because of computeautoilg the changing from RTL to LTR causes a little space. in this case user can use below macro. 
     \def\bigpar{\par\medskip}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %کدهای زیر سبب نگارش تمامی‌ ارقام با قلم یاس می‌گردد. (در این قلم صفرها به صورت صحیح و توخالی نگاشته می‌شوند.)
-     % با توجه به بروزرسانی بسته‌های بی‌دی نسخه ۳۰.۲ و زی‌پرشین نسخه ۲۰.۱ دیگر نیازی به کدهای زیر نیست لکن در نسخه‌های قبلی بکار می‌آید. 
-\@ifpackagelater{bidi}{2018/01/01}{}{\@ifpackagelater{xepersian}{2018/01/01}{}{
-    \if@bidi@csundef{bidi@digits}{% 
-        \newcount\bidi@digits
-        \XeTeXinterchartokenstate=\@ne
-        \newXeTeXintercharclass\bidi@digits@charclass
-        \bidi@digits=`\0 \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\9 \advance\bidi@digits \@ne \repeat
-        \bidi@digits=`\۰ \loop \XeTeXcharclass \bidi@digits \bidi@digits@charclass \ifnum\bidi@digits<`\۹ \advance\bidi@digits \@ne \repeat
-    }{}
-    \newif\if@qom@verbatim
-    \bidi@appto\verbatim@font{\@qom@verbatimtrue}
-    \bidi@appto\ttfamily{\@qom@verbatimtrue}
-    \newXeTeXintercharclass\qom@leftparen@charclass
-    \newXeTeXintercharclass\qom@rightparen@charclass
-    \XeTeXcharclass `\( \qom@leftparen@charclass
-    \XeTeXcharclass `\) \qom@rightparen@charclass
-    \XeTeXcharclass `\[ \qom@leftparen@charclass
-    \XeTeXcharclass `\] \qom@rightparen@charclass
-    \XeTeXcharclass `\{ \qom@leftparen@charclass
-    \XeTeXcharclass `\} \qom@rightparen@charclass
-    \XeTeXcharclass `\« \qom@leftparen@charclass
-    \XeTeXcharclass `\» \qom@rightparen@charclass
-    \XeTeXcharclass `\، \qom@leftparen@charclass    
-    \XeTeXcharclass `\, \qom@leftparen@charclass
-    \XeTeXcharclass `\؛ \qom@leftparen@charclass          
-    \XeTeXcharclass `\; \qom@leftparen@charclass          
-    \XeTeXcharclass `\: \qom@leftparen@charclass          
-    \XeTeXcharclass `\. \qom@leftparen@charclass     
-    \XeTeXcharclass `\- \qom@leftparen@charclass       
-    \ifdim\the\XeTeXversion\XeTeXrevision\p@>0.99993\p@
-      \chardef\qom@alloc@intercharclass@top=4095
-    \else
-      \chardef\qom@alloc@intercharclass@top=255
-    \fi
-    \chardef\qom@CharNormal=0
-    \XeTeXinterchartoks \qom@alloc@intercharclass@top \bidi@digits@charclass = {\BeginSwitchDigitFont}
-    \XeTeXinterchartoks \bidi@digits@charclass \qom@alloc@intercharclass@top = {\EndSwitchDigitFont}
-    \XeTeXinterchartoks \qom@leftparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
-    \XeTeXinterchartoks \bidi@digits@charclass \qom@rightparen@charclass = {\EndSwitchDigitFont}
-    \XeTeXinterchartoks \qom@rightparen@charclass \bidi@digits@charclass = {\BeginSwitchDigitFont}
-    \XeTeXinterchartoks \bidi@digits@charclass \qom@leftparen@charclass = {\EndSwitchDigitFont}    
-    \XeTeXinterchartoks \qom@CharNormal \bidi@digits@charclass = {\BeginSwitchDigitFont}
-    \XeTeXinterchartoks \bidi@digits@charclass \qom@CharNormal = {\EndSwitchDigitFont}     
-    \if@bidi@csundef{if@nonlatin}{%
-        \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
-        \global\edef\currentfont{\the\font}\if@Latin\else\bgroup\yasfont \fi\fi}
-        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@Latin\else\egroup\currentfont \fi\fi}
-    }{%
-        \newcommand*{\BeginSwitchDigitFont}{\if@qom@verbatim\else%
-        \global\edef\currentfont{\the\font}\if@nonlatin\bgroup\yasfont \fi\fi}
-        \newcommand*{\EndSwitchDigitFont}{\if@qom@verbatim\else\if@nonlatin\egroup\currentfont \fi\fi}
-    }
-}} % end of  ifpackagelater{bidi} and ifpackagelater{xepersian}
     \if@qom@debug
     \AtBeginShipout{%
       \AtBeginShipoutUpperRight{%
@@ -1391,7 +1217,7 @@ bookmarksnumbered = true
 
 
 %% 
-%% Copyright © 2017      by Seiied-Mohammad-Javad Razavian
+%% Copyright © 2017-2018      by Seiied-Mohammad-Javad Razavian
 %% 
 %% Distributable under the LaTeX Project Public License,
 %% version 1.3c or higher (your choice). The latest version of
