@@ -363,7 +363,7 @@ bookmarksnumbered = true
 %    \usepackage[para*]{manyfoot}
 %    \SetFootnoteHook{\setLTR}
 %    \DeclareNewFootnote[para]{A}
-    \RequirePackage[extrafootnotefeatures,Kashida, computeautoilg]{xepersian}[2018/10/06] %ver 21.6 and upper 
+    \RequirePackage[extrafootnotefeatures, computeautoilg]{xepersian}[2018/10/06] %ver 21.6 and upper 
     \@ifpackagelater{xepersian}{2018/10/06}{}{%
     \typeout{}
     \typeout{############## FATAL ERROR ##############}
