@@ -17,8 +17,7 @@ clean:
 ctan: 
 #	$(MAKE) clean
 	mkdir -p $(ClassName)/doc $(ClassName)/tex
-	cp -v README.md README
-	mv README $(ClassName)
+	cp -v README $(ClassName)
 	cp -v $(ClassName).cls  $(ClassName)/tex
 	cp -v chapters/* images/*		$(ClassName)/doc
 	cp -v dic* labs.tex settings.tex		$(ClassName)/doc
