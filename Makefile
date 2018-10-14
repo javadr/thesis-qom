@@ -22,7 +22,7 @@ ctan:
 	cp -v $(ClassName).tex  $(ClassName)/doc
 	cp -rv images		$(ClassName)/doc
 	cp -rv chapters/bib-index.tex chapters/correctWriting.tex chapters/installation.tex chapters/intro.tex chapters/latexCommands.tex chapters/morelatex.tex chapters/preface.tex chapters/qomthesis-guide.tex chapters/realSample.tex		$(ClassName)/doc/chapters
-	cp -v dic* labs.tex settings.tex		$(ClassName)/doc
+	cp -v dic* labs.tex settings.tex	references.bib	$(ClassName)/doc
 	zip -r $(ClassName).zip $(ClassName)
 	mv -fv $(ClassName).zip ..
 	rm -rfv ../$(ClassName)
