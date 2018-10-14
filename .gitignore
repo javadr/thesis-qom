@@ -10,7 +10,7 @@
 *.lol
 *.idx
 *qomReport*
-R*
+R*.tex
 *~
 .*
 *.bbl
