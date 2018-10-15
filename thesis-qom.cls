@@ -1,4 +1,4 @@
-%%%  Version 0.4
+%%%  Version 0.41
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -10,6 +10,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.41,  Oct 15th, 2018
+%%%  thesis-qom.pdf is now attached to the class documentation. 
 %%%  ver 0.4,  Oct 12th, 2018
 %%%  The new version is adapted with bidi ver 34.5 and bidi ver 21.6; in this new version extrafootnotefeatures have many extra features than to past, as a result there is no need to patch footnotes. 
 %%%  ver 0.33,  Feb 4th, 2018
@@ -47,8 +49,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2018/10/12}
-\def\qom@thesis@version{0.4}
+\def\qom@thesis@date{2018/10/15}
+\def\qom@thesis@version{0.41}
 \ProvidesClass{thesis-qom}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
