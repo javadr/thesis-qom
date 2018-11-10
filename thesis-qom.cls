@@ -1,4 +1,4 @@
-%%%  Version 0.41
+%%%  Version 0.42
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
 %%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
 %%%  `aut-thesis' by Vafa Khalighi. 
@@ -10,6 +10,8 @@
 %%%   __________________________________
 %%%   
 %%%  Change Log:
+%%%  ver 0.42,  Nov 10th, 2018
+%%%  logo is replaced by logo.jpg because of a conflict with ls-R databese.
 %%%  ver 0.41,  Oct 15th, 2018
 %%%  thesis-qom.pdf is now attached to the class documentation. 
 %%%  ver 0.4,  Oct 12th, 2018
@@ -49,8 +51,8 @@
 %%%  First Release
 
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2018/10/15}
-\def\qom@thesis@version{0.41}
+\def\qom@thesis@date{2018/11/10}
+\def\qom@thesis@version{0.42}
 \ProvidesClass{thesis-qom}[%
     \qom@thesis@date\space version\qom@thesis@version\space
   University of  Qom thesis class%
@@ -504,7 +506,7 @@ bookmarksnumbered = true
     \baselineskip=.76cm
     \begin{center}
         \setlength{\baselineskip}{.7\baselineskip}
-        {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\  دانشگاه قم}\\
+        {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo.jpg}\\  دانشگاه قم}\\
         {\bfseries\titrfont
         مدیریت تحصیلات تکمیلی\\
         «تعهدنامه اصالت \ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\fi»}
@@ -583,7 +585,7 @@ bookmarksnumbered = true
 %    \begin{center}
     \begingroup
     \centerline{\zarfont%\fontsize{12}{14}\selectfont
-    \includegraphics[width=2cm, height=2cm]{logo} %\\  دانشگاه قم\\
+    \includegraphics[width=2cm, height=2cm]{logo.jpg} %\\  دانشگاه قم\\
     }%\par%[5pt]
     \centerline{\titrfont\bfseries «صورت جلسه دفاع از \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi»}
     \endgroup
@@ -720,7 +722,7 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%% صفحه عنوان  %%%%%%%%%%%%%%%
 \begin{preamblepage}
     \begin{titlepage}
-    {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\[-7pt] \bfseries دانشگاه قم}
+    {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo.jpg}\\[-7pt] \bfseries دانشگاه قم}
     \\[-5pt]
     {\zarfont\fontsize{12}{14}\selectfont\bfseries دانشکده 
     \ifx\@faculty\undefined\qom@dotline{علوم ریاضی}\else\@faculty\fi
@@ -1144,7 +1146,7 @@ bookmarksnumbered = true
     \begin{preamblepage}
         \begin{titlepage}
     \begin{latin}
-        {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo}\\ The University of Qom}
+        {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo.jpg}\\ The University of Qom}
         \\[5pt]
         {\fontsize{12}{14}\selectfont Faculty of 
         \ifx\@faculty@english\undefined\qom@dotline{Mathematics}\else\@faculty@english\fi

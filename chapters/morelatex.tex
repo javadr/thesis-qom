@@ -43,6 +43,7 @@
 برای استفاده از بیب‌تک باید مراجع خود را در یک فایل با پسوند \lr{bib} ذخیره نمایید. یک فایل \lr{bib} در واقع یک پایگاه داده از مراجع\LTRfootnote{Bibliography Database}  شماست که هر مرجع در آن به عنوان یک رکورد از این پایگاه داده
 با قالبی خاص ذخیره می‌شود. به هر رکورد یک مدخل\LTRfootnote{Entry} گفته می‌شود. یک نمونه مدخل برای معرفی کتاب \lr{Digital Image Processing} در ادامه آمده است:
 
+\begin{latin}
 \begin{Verbatim}
 @BOOK{Gonzalez02image,
   AUTHOR =      {Rafael Gonzalez and Richard Woods},
@@ -53,6 +54,7 @@
   ADDRESS =     {Upper Saddle River, NJ, USA}
 }
 \end{Verbatim}
+\end{latin}
 
 در مثال فوق، \lr{@BOOK} مشخصهٔ شروع یک مدخل مربوط به یک کتاب و \lr{Gonzalez02book} برچسبی است که به‌این مرجع منتسب شده است.
  این برچسب بایستی یکتا باشد. برای آنکه فرد به راحتی بتواند برچسب مراجع خود را به خاطر بسپارد و حتی‌الامکان برچسب‌ها متفاوت با هم باشند معمولاً از قوانین خاصی به‌این منظور استفاده می‌شود. یک قانون می‌تواند فامیل نویسندهٔ اول+دو رقم سال نشر+اولین کلمهٔ عنوان اثر باشد. به \lr{AUTHOR} و $\dots$ و \lr{ADDRESS} فیلدهای این مدخل گفته می‌شود؛ که هر یک با مقادیر مربوط به مرجع مقدار گرفته‌اند. ترتیب فیلدها مهم نیست. 
@@ -145,9 +147,9 @@ $\mathbf{x}_i\leftrightarrow\mathbf{x}'_i$
 درج کد به زبانهای مختلف نیز به سادگی امکان‌پذیر است. برنامه 
 \ref{Code:MATLAB1}
 یک قطعه کد \lr{MATLAB} را نشان می‌دهد.
-%\begin{figure}
-%\begin{latin}
-\begin{lstlisting}[language=MATLAB,breaklines=true,numbers=right, numberstyle=\footnotesize, numbersep=-10pt,  frame=single, breakatwhitespace=false,
+
+\pagebreak
+\begin{lstlisting}[language=MATLAB,breaklines=true,numbers=right, numberstyle=\footnotesize, numbersep=-10pt,  frame=single, breakatwhitespace=false, 
 caption={نمونه کد \lr{MATLAB}},label={Code:MATLAB1}]
 % define a continuous function
 f = '4*sin(2*pi*t)';
@@ -156,11 +158,6 @@ for i=1:10
     disp(i)
 end
 \end{lstlisting}
-%\end{latin}
-
-
-%\end{figure}
-%\doublespacing
 
 
 \section{فرمول‌های ریاضی}
