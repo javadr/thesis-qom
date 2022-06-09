@@ -1,0 +1,41 @@
+%%%  ver 0.5,  June 9th, 2022
+%%%  In compliance with the latest updaet of bidi/XePersian
+%%%  ver 0.42,  Nov 10th, 2018
+%%%  logo is replaced by logo.jpg because of a conflict with ls-R databese.
+%%%  ver 0.41,  Oct 15th, 2018
+%%%  thesis-qom.pdf is now attached to the class documentation.
+%%%  ver 0.4,  Oct 12th, 2018
+%%%  The new version is adapted with bidi ver 34.5 and bidi ver 21.6; in this new version extrafootnotefeatures have many extra features than to past, as a result there is no need to patch footnotes.
+%%%  ver 0.33,  Feb 4th, 2018
+%%%  The style is called thesis-qom by know.
+%%%  ver 0.32,  Jan 2nd, 2018
+%%%  After bidi ver 30.2 and xepersian ver 20.1 ther is no need so adjust text digit font in the style,
+%%%  because those packages do it as desirable. These updates happened in  January 1st, 2018.
+%%%  ver 0.31, Dec 17th, 2017
+%%%  some little change in toc style
+%%%  ver 0.3, Dec 12th, 2017
+%%%  \listofsymbols macro is defined with the aid of Vahid Damanafshan.
+%%%  ver 0.29, Dec 11th, 2017
+%%%  scratch option replaced by final
+%%%  ver 0.28, Dec 11th, 2017
+%%%  Final improvement in setting digits' font to Yas font; it'll be done with the aid of some xetex interal macros.
+%%%  Thanks to Vafa Khalighi for his draft in doing such an action automatically.
+%%%  ver 0.27, Dec 10th, 2017
+%%%  Another improvement in sophisticated main matter page numbering.
+%%%  ver 0.26, Dec 9th, 2017
+%%%  There is no neeed to \mainmatter macro, it'll be set automatically by some hacks.
+%%%  ver 0.25, Dec 6th, 2017
+%%%  some other improvement in en2fa dictionary. https://tex.stackexchange.com/questions/404984
+%%%  ver 0.24, Dec 6th, 2017
+%%% definition of \lettergroup macro changed in coordination with style of fa2en dictionary .
+%%%  ver 0.23, Dec 5th, 2017
+%%%  scratch option causes the preamble pages not to show. Some improvement in dictionaries.
+%%%  ver 0.22, Dec 4th, 2017
+%%%  some improvement in TOC.
+%%%  ver 0.21, Dec 3rd, 2017
+%%%  adding \strut to \RTL and \LTR command, for solving http://qa.parsilatex.com/28105 by vafa khalighi.
+%%% Some improvement in dictionaries code.
+%%%  ver 0.2, Dec 3rd, 2017
+%%%  Dictionary files are automatically read from the dicfa2en.tex and dicen2fa.tex.
+%%%  ver 0.1, Nov 12th, 2017
+%%%  First Release

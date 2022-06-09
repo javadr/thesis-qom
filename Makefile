@@ -1,5 +1,5 @@
 ClassName=thesis-qom
-Trash=*.aux *.log *.dvi *.idx *.ilg *.ind *.toc *.out *.pyg *.synctex *.tdo *.blg *.lot *.lol *.lof *.syn *.suc *.bbl *.syc *.brf *.los *.brg
+Trash=*.aux *.log *.dvi *.idx *.ilg *.ind *.toc *.out *.pyg *.synctex *.tdo *.blg *.lot *.lol *.lof *.syn *.suc *.bbl *.syc *.brf *.los *.brg *.blg
 
 all: doc clean
 
@@ -8,15 +8,14 @@ doc:
 	bibtex $(ClassName)
 	xelatex --shell-escape $(ClassName)
 	xelatex --shell-escape $(ClassName)
-	evince $(ClassName).pdf &	
+	evince $(ClassName).pdf &
 
 clean:
-	rm -rfv $(Trash)
+	-rm -rfv $(Trash)
 	cd chapters; rm -rfv $(Trash)
 
-ctan: 
-#	$(MAKE) clean
-	mkdir -p $(ClassName)/doc $(ClassName)/doc/chapters $(ClassName)/tex 
+ctan: clean
+	mkdir -p $(ClassName)/doc $(ClassName)/doc/chapters $(ClassName)/tex
 	cp -v README $(ClassName)
 	cp -v $(ClassName).cls  $(ClassName)/tex
 	cp -v $(ClassName).tex  $(ClassName).pdf    $(ClassName)/doc

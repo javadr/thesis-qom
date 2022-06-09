@@ -1,61 +1,20 @@
-%%%  Version 0.42
+%%%  Version 0.5
 %%%  This work is inspired by `Tabriz_thesis.cls' by Vahid Damanafshan,
-%%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and 
-%%%  `aut-thesis' by Vafa Khalighi. 
+%%%  `yazd-thesis.cls' by Vahid Damanafshan, `KNTU_thesis.cls' by Farschad Torabi, and
+%%%  `aut-thesis' by Vafa Khalighi.
 %%%   __________________________________
 %%%
-%%%   Copyright © 2017-2018 Seiied-Mohammad-Javad Razavian
-%%%  
-%%%   http://www.parsilatex.com  
+%%%   Copyright © 2017-2022 Seiied-Mohammad-Javad Razavian
+%%%
+%%%   http://www.parsilatex.com
 %%%   __________________________________
-%%%   
-%%%  Change Log:
-%%%  ver 0.42,  Nov 10th, 2018
-%%%  logo is replaced by logo.jpg because of a conflict with ls-R databese.
-%%%  ver 0.41,  Oct 15th, 2018
-%%%  thesis-qom.pdf is now attached to the class documentation. 
-%%%  ver 0.4,  Oct 12th, 2018
-%%%  The new version is adapted with bidi ver 34.5 and bidi ver 21.6; in this new version extrafootnotefeatures have many extra features than to past, as a result there is no need to patch footnotes. 
-%%%  ver 0.33,  Feb 4th, 2018
-%%%  The style is called thesis-qom by know. 
-%%%  ver 0.32,  Jan 2nd, 2018
-%%%  After bidi ver 30.2 and xepersian ver 20.1 ther is no need so adjust text digit font in the style, 
-%%%  because those packages do it as desirable. These updates happened in  January 1st, 2018. 
-%%%  ver 0.31, Dec 17th, 2017 
-%%%  some little change in toc style
-%%%  ver 0.3, Dec 12th, 2017 
-%%%  \listofsymbols macro is defined with the aid of Vahid Damanafshan. 
-%%%  ver 0.29, Dec 11th, 2017 
-%%%  scratch option replaced by final 
-%%%  ver 0.28, Dec 11th, 2017  
-%%%  Final improvement in setting digits' font to Yas font; it'll be done with the aid of some xetex interal macros. 
-%%%  Thanks to Vafa Khalighi for his draft in doing such an action automatically. 
-%%%  ver 0.27, Dec 10th, 2017  
-%%%  Another improvement in sophisticated main matter page numbering.
-%%%  ver 0.26, Dec 9th, 2017  
-%%%  There is no neeed to \mainmatter macro, it'll be set automatically by some hacks. 
-%%%  ver 0.25, Dec 6th, 2017  
-%%%  some other improvement in en2fa dictionary. https://tex.stackexchange.com/questions/404984
-%%%  ver 0.24, Dec 6th, 2017  
-%%% definition of \lettergroup macro changed in coordination with style of fa2en dictionary . 
-%%%  ver 0.23, Dec 5th, 2017  
-%%%  scratch option causes the preamble pages not to show. Some improvement in dictionaries. 
-%%%  ver 0.22, Dec 4th, 2017
-%%%  some improvement in TOC. 
-%%%  ver 0.21, Dec 3rd, 2017
-%%%  adding \strut to \RTL and \LTR command, for solving http://qa.parsilatex.com/28105 by vafa khalighi. 
-%%% Some improvement in dictionaries code. 
-%%%  ver 0.2, Dec 3rd, 2017
-%%%  Dictionary files are automatically read from the dicfa2en.tex and dicen2fa.tex. 
-%%%  ver 0.1, Nov 12th, 2017
-%%%  First Release
-
+%%%
 \NeedsTeXFormat{LaTeX2e}[1994/06/01]
-\def\qom@thesis@date{2018/11/10}
-\def\qom@thesis@version{0.42}
+\def\qom@thesis@date{2022/06/09}
+\def\qom@thesis@version{0.5}
 \ProvidesClass{thesis-qom}[%
     \qom@thesis@date\space version\qom@thesis@version\space
-  University of  Qom thesis class%
+    University of  Qom thesis class%
 ]
 \newif\if@qom@print
 \newif\if@qom@index
@@ -73,7 +32,7 @@
 \DeclareOption*{\PassOptionsToPackage{\CurrentOption}{xepersian}}
 \DeclareOption{final}{\@qom@draftfalse\@qom@printfalse}
 \DeclareOption{print}{\@qom@printtrue}
-\DeclareOption{phd}{\qom@thesistype=\z@\relax} %default option 
+\DeclareOption{phd}{\qom@thesistype=\z@\relax} %default option
 \DeclareOption{ms}{\qom@thesistype=\@ne\relax}
 \DeclareOption{bs}{\qom@thesistype=\tw@\relax}
 \DeclareOption{index}{\@qom@indextrue}%
@@ -213,11 +172,11 @@
 \def\@striprank#1({\def\@@striprank##1){##1}%
 \edef\@rank{\@@striprank#1}}%
 \def\@get@name@rank#1{%
-  \@get#1(\relax);%
-  \edef\@tmpa{\@rank}%
-  \edef\@relax{\relax}%
-  \ifx\@tmpa\@relax%
-  \else\expandafter\@striprank\@rank\fi%
+    \@get#1(\relax);%
+    \edef\@tmpa{\@rank}%
+    \edef\@relax{\relax}%
+    \ifx\@tmpa\@relax%
+    \else\expandafter\@striprank\@rank\fi%
 }%
 \def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
 \hbox{}
@@ -279,18 +238,18 @@
 %\WarningFilter{latex}{Underfull}
 %\WarningFilter{latex}{Overfull}
 %\WarningFilter{latex}{LaTeX}
-%\WarningsOff[Fancyhdr,fancyhdr, hyperref] 
+%\WarningsOff[Fancyhdr,fancyhdr, hyperref]
 %\ActivateWarningFilters
 %\SafeMode
 %-------------------------------------------------------------------------------------------------------------------
-% در ورژن جدید زی‌پرشین برای تایپ متن‌های ریاضی، این سه بسته، حتماً باید فراخوانی شود؛‌ این بسته‌ها در صورت نیاز کاربر به متن افزوده خواهد شد. 
+% در ورژن جدید زی‌پرشین برای تایپ متن‌های ریاضی، این سه بسته، حتماً باید فراخوانی شود؛‌ این بسته‌ها در صورت نیاز کاربر به متن افزوده خواهد شد.
 \RequirePackage{amsmath}
 \RequirePackage{amsthm}
 \RequirePackage{amssymb}
 \RequirePackage{biditools}
 \RequirePackage{multicol}
 % بسته‌ای برای تنطیم حاشیه‌های بالا، پایین، چپ و راست صفحه
-\RequirePackage[top=40mm, bottom=30mm, left=30mm, right=40mm, 
+\RequirePackage[top=40mm, bottom=30mm, left=30mm, right=40mm,
         bindingoffset=0mm, headsep=15mm]{geometry}
 %
 \RequirePackage{graphicx}
@@ -318,9 +277,9 @@
 \RequirePackage[titles, subfigure]{tocloft}
 \addtolength{\cftchapnumwidth}{10pt}
 \addtolength{\cftsecnumwidth}{12pt}
-\addtolength{\cftsubsecnumwidth}{14pt}      
+\addtolength{\cftsubsecnumwidth}{14pt}
 
-% بسته‌ای برای ظاهر شدن «مراجع»  در فهرست مطالب 
+% بسته‌ای برای ظاهر شدن «مراجع»  در فهرست مطالب
 %nottoc Disables the inclusion of the ToC.
 %notlot Disables the inclusion of the List of Tables.
 %notlof Disables the inclusion of the List of Figures.
@@ -330,11 +289,11 @@
     \PassOptionsToPackage{quickindex-variant1}{xepersian}%
     \RequirePackage{makeidx}%
     \makeindex%
-\fi    
+\fi
 \RequirePackage{tikz}
 \global\let\tikz@ensure@dollar@catcode=\relax
 \RequirePackage{apptools}
-%%%%% The hyperref package should be the last package before xepersian package. 
+%%%%% The hyperref package should be the last package before xepersian package.
 \if@qom@print
     \PassOptionsToPackage{monocolor, hyperref}{xcolor}
     \RequirePackage[hidelinks=true]{hyperref}
@@ -343,14 +302,14 @@
     \RequirePackage[
     pagebackref,
     colorlinks=true, %% به جای استفاده از مربع قرمز دور موارد ارجاعی از لینک های رنگی استفاده کند.
-    linkcolor=red, anchorcolor=green, citecolor=magenta, urlcolor=cyan, filecolor=magenta, %% رنگ برخی از لینک ها . 
+    linkcolor=red, anchorcolor=green, citecolor=magenta, urlcolor=cyan, filecolor=magenta, %% رنگ برخی از لینک ها .
     ]{hyperref}
-\fi    
+\fi
 %% در این قسمت تنظیمات بسته hyperref را قرار می دهیم.
 %% این تنظیمات شامل موارد زیر است.
 \hypersetup{
 %% موقعی که فایل پی دی اف خروجی را باز می کنید صفحه به صورت عریض و بزرگ باز می شود.
-pdfmenubar=false, pdfstartview=FitH, 
+pdfmenubar=false, pdfstartview=FitH,
 %% در قسمت مراجع شماره صفحه ای که به آن مرجع ارجاع داده است را وارد می کند،
 %% مواردی که برای فعال سازی این که شماره اشکال را به صورت ارجاعی نشان دهد
 pagebackref =true,hyperfigures=true,
@@ -367,29 +326,29 @@ bookmarksnumbered = true
 %    \usepackage[para*]{manyfoot}
 %    \SetFootnoteHook{\setLTR}
 %    \DeclareNewFootnote[para]{A}
-    \RequirePackage[extrafootnotefeatures, computeautoilg]{xepersian}[2018/10/06] %ver 21.6 and upper 
+    \RequirePackage[extrafootnotefeatures, computeautoilg]{xepersian}[2018/10/06] %ver 21.6 and upper
     \@ifpackagelater{xepersian}{2018/10/06}{}{%
     \typeout{}
     \typeout{############## FATAL ERROR ##############}
-    \ClassError{thesis-qom}{You must update your TeX distribution; \MessageBreak 
+    \ClassError{thesis-qom}{You must update your TeX distribution; \MessageBreak
         This version of thesis-qom just works \MessageBreak with xepersian ver 21.6 or upper
     }{if you have no time to update your TeX distribution,\MessageBreak do use there-qom version 0.34 or below.}
     \end{document}
-    } 
+    }
     \normalRTLparaLTRfootnotes*
-    % in case of Kashida=off option, because nastaliq font has no support for kashida and the code needs to know about that. 
+    % in case of Kashida=off option, because nastaliq font has no support for kashida and the code needs to know about that.
     \if@bidi@csundef{if@Kashida@on}{\newif\if@Kashida@on}{}
     % See http://qa.parsilatex.com/7884 for details
     \if@bidi@csundef{@bidi@removefromreset}{}{%
         \@bidi@removefromreset{footnote}{chapter}%
     }
 %    %\settextfont[Language=Default,Scale=1.33,BoldFont={IRlotus}]{IRLotus} %scale adopted with respect to XB Zar font.
-    \settextfont[Scale=1.12,]{XB Niloofar} %scale adopted with respect to XB Zar font.  
+    \settextfont[Scale=1.12,]{XB Niloofar} %scale adopted with respect to XB Zar font.
     \setdigitfont[Scale=1]{Yas}
 %%    \setlatintextfont[Scale=1.1,]{Linux Libertine}%Times New Roman
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \@ifpackageloaded{listings}{
-        \lstset{ 
+        \lstset{
             basicstyle=\setLTR\@nonlatinfalse\footnotesize\ttfamily, % from xepersian ver. 16.8
             captiondirection=RTL, captionscript=nonlatin,
         }
@@ -406,18 +365,24 @@ bookmarksnumbered = true
 %   \DefaultMathsDigits
     %
     %\DeclareMathSizes{textsize}{mathsize}{scriptsize}{scriptscriptsize}
-    % گزینه اول: این برای چه دسته فونتی است. پیش فرض استایل ما فونت 10pt است. 
+    % گزینه اول: این برای چه دسته فونتی است. پیش فرض استایل ما فونت 10pt است.
     % گزینه دوم: اندازه فونت توابع و موجودات ریاضی درون متن.
     % گزینه سوم: برای اسکریپت ها، اندازه زیرنویس و بالانویس.
     % گزینه چهارم: برای زیرنویس زیرنویس.
 
-    % در دستورات زیر ما برای سه حالت، اندازه‌های مورد نظر را تعریف کرده ایم. 
+    % در دستورات زیر ما برای سه حالت، اندازه‌های مورد نظر را تعریف کرده ایم.
 %    \DeclareMathSizes{10}{11}{9}{8}   % For size 10 text
 %    \DeclareMathSizes{11}{12}{11}{10}   % For size 11 text
 %    \DeclareMathSizes{12}{13}{12}{11}  % For size 12 text
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \newsavebox\qom@thesis@proof@box
-    \sbox{\qom@thesis@proof@box}{\textcolor{gray}{\hboxR{\tiny آماده‌ شده توسط کلاس \texttt{thesis-qom}، نسخهٔ \lr{\qom@thesis@version}}}}
+    \def\@getcl@ss#1.cls#2\relax{\def\@currentclass{#1}}
+    \def\@getclass{\expandafter\@getcl@ss\@filelist\relax}
+    \@getclass
+    \sbox{\qom@thesis@proof@box}{\textcolor{gray}{\hboxR{\tiny%
+    \char"0622\char"0645\char"0627\char"062F\char"0647{ }\char"200C\char"0634\char"062F\char"0647{ }%
+    \char"062A\char"0648\char"0633\char"0637{ }\char"06A9\char"0644\char"0627\char"0633{ }%
+    \texttt{\@currentclass}، \char"0646\char"0633\char"062E\char"0647\char"0654{ }\lr{\qom@thesis@version}}}}
     \newdimen\qom@thesis@proof@box@dim@ht
     \newdimen\qom@thesis@proof@box@dim@wd
     \qom@thesis@proof@box@dim@wd=\wd\qom@thesis@proof@box
@@ -425,10 +390,10 @@ bookmarksnumbered = true
     \AtBeginDocument{\AtBeginShipoutInit}%
     \AtBeginShipout{\AtBeginShipoutLowerRight{%
     % \put doesn't work properly in index pages!
-    %\put(0,\LengthToUnit{\ht\qom@thesis@proof@box}){\rotatebox{90}{\usebox\qom@thesis@proof@box}}% 
+    %\put(0,\LengthToUnit{\ht\qom@thesis@proof@box}){\rotatebox{90}{\usebox\qom@thesis@proof@box}}%
     \begin{tikzpicture}[color=black,remember picture, overlay, every node/.style={inner sep=0pt},]
-        \node at (current page.south east) 
-        [anchor=north, xshift=-\qom@thesis@proof@box@dim@ht,yshift=\qom@thesis@proof@box@dim@wd+2] 
+        \node at (current page.south east)
+        [anchor=north, xshift=-\qom@thesis@proof@box@dim@ht,yshift=\qom@thesis@proof@box@dim@wd+2]
         {\rotatebox{90}{\usebox\qom@thesis@proof@box}};
     \end{tikzpicture}
     }}
@@ -445,7 +410,7 @@ bookmarksnumbered = true
     {\typeout{Succeeded in changing `ه` into `ه‍`}}
     {\typeout{Failed in changing `ه` into `ه‍`}}
     \PersianAlphs
-%%% because of computeautoilg the changing from RTL to LTR causes a little space. in this case user can use below macro. 
+%%% because of computeautoilg the changing from RTL to LTR causes a little space. in this case user can use below macro.
     \def\bigpar{\par\medskip}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \if@qom@debug
@@ -474,9 +439,9 @@ bookmarksnumbered = true
 \def\Thesis{\ifcase\qom@thesistype{رساله}\or{پایان‌نامه}\or{پروژه}\fi}
 %
 \def\titlepage{\newpage\centering
-  \thispagestyle{empty}
-  \parindent 0pt \parskip 10pt plus 1fil minus 1fil
-  \def\baselinestretch{1}\@normalsize\vbox to \vsize\bgroup\vbox to 9in\bgroup}
+    \thispagestyle{empty}
+    \parindent 0pt \parskip 10pt plus 1fil minus 1fil
+    \def\baselinestretch{1}\@normalsize\vbox to \vsize\bgroup\vbox to 9in\bgroup}
 \def\endtitlepage{\par\kern 0pt\egroup\vss\egroup\newpage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newenvironment{preamblepage}{%
@@ -497,7 +462,7 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\renewenvironment{abstract}{
 %\section*{چکیده}
-%\settextfont[Scale=1.2]{Adobe Arabic} 
+%\settextfont[Scale=1.2]{Adobe Arabic}
 %\setlatintextfont[Scale=1]{Times New Roman}
 %}{\\*[8pt]}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -515,57 +480,57 @@ bookmarksnumbered = true
     \rule{\textwidth}{1mm}\vspace{-\baselineskip}\\[2pt]
     \rule{\textwidth}{1pt}
 
-    
 
-    \noindent 
-    اینجانب آقای/خانم: 
+
+    \noindent
+    اینجانب آقای/خانم:
     {\ifx\@author@persian\undefined\qom@dotline{سیدمحمدجواد رضویان}\else\bfseries\@author@persian\fi{} }
-    دانشجوی مقطع 
+    دانشجوی مقطع
     {کارشناسی ارشد}\ifnum\qom@thesistype=1\rlap{\checkmark}\fi$\bigcirc$ %\hskip 10pt
-    {دکتری}\ifnum\qom@thesistype=0\rlap{\checkmark}\fi$\bigcirc$ %\hskip 10pt 
-    به شماره دانشجویی 
+    {دکتری}\ifnum\qom@thesistype=0\rlap{\checkmark}\fi$\bigcirc$ %\hskip 10pt
+    به شماره دانشجویی
     {\ifx\@student@id\undefined\qom@dotline{۹۶ ۱۲۱۴۱۰۱۸}\else\bfseries\@student@id\fi{} }
     رشته
     {\ifx\@major\undefined\qom@dotline{مهندسی کامپیوتر}\else\bfseries\@major\fi{} }
     {\ifx\@field\undefined\else گرایش \bfseries\@field\fi }
-    که در تاریخ 
+    که در تاریخ
     {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\LR{\@defensedate}\fi{} }
     از \Thesis{}  خود تحت عنوان:\\
     \centerline{\ifx\@title@persian\undefined\qom@dotlined{7cm}\else\bfseries«\@title@persian»\fi}
-    با کسب نمره  با عدد: 
+    با کسب نمره  با عدد:
     {\ifx\@grade\undefined\qom@dotline{۱۹/۲۵}\else\bfseries\LR{$\mathbf{\@grade}$}\fi{} }
-    با حروف: 
+    با حروف:
     {\ifx\@grade@letters\undefined\qom@dotline{نوزده و بیست و پنج صدم تمام}\else\bfseries\@grade@letters\fi}
-     و با درجه 
+     و با درجه
      {\ifx\@degree\undefined\qom@dotline{عالی}\else\bfseries\@degree\fi{} }\linebreak
      دفاع نموده‌ام، بدین وسیله متعهد می‌شوم که:
-     \begin{enumerate}[label=\arabic*-]
-        \item 
-        این \Thesis{} حاصل تحقیق و پژوهش انجام شده توسط اینجانب بوده و در مواردی که از دستاوردهای 
-        علمی و پژوهشی دیگران اعم از پایان‌نامه، کتاب، مقاله، \ldots استفاده نموده‌ام،   مطابق ضوابط و رویه  موجود، نام منبع مورد استفاده و سایر مشخصات 
-        آن را در فهرست مربوطه ذکر و درج کرده‌ام. 
-        \item 
-        این \Thesis{} قبلاً برای هیچ مدرک تحصیلی هم سطح، پایین‌تر یا بالاتر در سایر \linebreak 
-        دانشگاه‌ها و مؤسسات آموزش عالی ارائه نشده است. 
-        \item 
-        چنانچه بعد از فراغت از تحصیل،‌ قصد استفاده و هرگونه بهره‌برداری اعم از چاپ کتاب، ثبت اختراع و \ldots 
-        از این \Thesis{} را داشته باشم، از حوزه معاونت پژوهشی واحد مجوزهای مربوطه را اخذ نمایم. 
-        \item 
-        چنانچه در هر مقطع زمانی خلاف موارد فوق ثابت شود، عواقب ناشی از آن را می‌پذیرم  و واحد دانشگاه قم مجاز است با اینجانب مطابق ضوابط و مقررات 
-        رفتار نموده و در صورت ابطال مدرک تحصیلی‌ام هیچگونه ادعایی نخواهم داشت. 
-     \end{enumerate}
+    \begin{enumerate}[label=\arabic*-]
+        \item
+        این \Thesis{} حاصل تحقیق و پژوهش انجام شده توسط اینجانب بوده و در مواردی که از دستاوردهای
+        علمی و پژوهشی دیگران اعم از پایان‌نامه، کتاب، مقاله، \ldots استفاده نموده‌ام،   مطابق ضوابط و رویه  موجود، نام منبع مورد استفاده و سایر مشخصات
+        آن را در فهرست مربوطه ذکر و درج کرده‌ام.
+        \item
+        این \Thesis{} قبلاً برای هیچ مدرک تحصیلی هم سطح، پایین‌تر یا بالاتر در سایر \linebreak
+        دانشگاه‌ها و مؤسسات آموزش عالی ارائه نشده است.
+        \item
+        چنانچه بعد از فراغت از تحصیل،‌ قصد استفاده و هرگونه بهره‌برداری اعم از چاپ کتاب، ثبت اختراع و \ldots
+        از این \Thesis{} را داشته باشم، از حوزه معاونت پژوهشی واحد مجوزهای مربوطه را اخذ نمایم.
+        \item
+        چنانچه در هر مقطع زمانی خلاف موارد فوق ثابت شود، عواقب ناشی از آن را می‌پذیرم  و واحد دانشگاه قم مجاز است با اینجانب مطابق ضوابط و مقررات
+        رفتار نموده و در صورت ابطال مدرک تحصیلی‌ام هیچگونه ادعایی نخواهم داشت.
+    \end{enumerate}
 
     \vfill
     \begin{footnotesize}
     \bfseries
-     \begin{tabularx}{\textwidth}{@{\hskip 1cm}c@{\hskip 2.5cm}c}
-     صحت امضای دانشجو مورد تایید است. & نام و نام‌خانوادگی متعهد: \\ 
-     نماینده تحصیلات تکمیلی & {\scriptsize تاریخ و امضاء} \\
-     نام و نام‌خانوادگی: \ldots\ldots\ldots  & \\
-     {\scriptsize تاریخ و امضاء} & \\
-     \end{tabularx}
-     \end{footnotesize}
-     \vfill\null
+    \begin{tabularx}{\textwidth}{@{\hskip 1cm}c@{\hskip 2.5cm}c}
+        صحت امضای دانشجو مورد تایید است. & نام و نام‌خانوادگی متعهد: \\
+        نماینده تحصیلات تکمیلی & {\scriptsize تاریخ و امضاء} \\
+        نام و نام‌خانوادگی: \ldots\ldots\ldots  & \\
+        {\scriptsize تاریخ و امضاء} & \\
+    \end{tabularx}
+    \end{footnotesize}
+    \vfill\null
 \end{preamblepage}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -592,32 +557,32 @@ bookmarksnumbered = true
 %    \end{center}
 
     {\bfseries با تأييدات خداوند متعال و با استعانت از حضرت ولی عصر}
-     {\footnotesize (عجل الله تعالی فرجه الشريف)}
-     
-     
-     جلسه دفاعیه \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi{} خانم/آقای{}
-         {\ifx\@author@persian\undefined\qom@dotlined{4cm}\else\bfseries\@author@persian\fi} 
-     رشته 
+    {\footnotesize (عجل الله تعالی فرجه الشريف)}
+
+
+    جلسه دفاعیه \ifcase\qom@thesistype{رساله دکتری}\or{پایان‌نامه کارشناسی ارشد}\fi{} خانم/آقای{}
+        {\ifx\@author@persian\undefined\qom@dotlined{4cm}\else\bfseries\@author@persian\fi}
+    رشته
         {\ifx\@major\undefined\qom@dotline{مهندسی کامپیوتر}\else\bfseries\@major\fi}
-     تحت عنوان 
-     {\ifx\@title@persian\undefined\qom@dotlined{9cm}\else\bfseries\@title@persian\fi}
-     با حضور هیأت داوران در محل دانشگاه قم در تاریخ 
+    تحت عنوان
+    {\ifx\@title@persian\undefined\qom@dotlined{9cm}\else\bfseries\@title@persian\fi}
+    با حضور هیأت داوران در محل دانشگاه قم در تاریخ
     {\ifx\@defensedate\undefined\qom@dotline{۱۳۹۶/۰۷/۱۴}\else\bfseries\LR{\@defensedate}\fi{} }
-     تشکیل گردید. 
-     
-     در این جلسه، \Thesis{} با نمره (به عدد  
-     {\bfseries\ifx\@grade\undefined\ldots\ldots\ldots\else\LR{$\mathbf{\@grade}$}\fi}{،}
-      به حروف
-      {\bfseries\ifx\@grade@letters\undefined\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\else\@grade@letters\fi})    و \linebreak
+    تشکیل گردید.
+
+    در این جلسه، \Thesis{} با نمره (به عدد
+    {\bfseries\ifx\@grade\undefined\ldots\ldots\ldots\else\LR{$\mathbf{\@grade}$}\fi}{،}
+    به حروف
+    {\bfseries\ifx\@grade@letters\undefined\ldots\ldots\ldots\ldots\ldots\ldots\ldots\ldots\else\@grade@letters\fi})    و \linebreak
         با درجه عالی ~%
-        \ifx\@degree\@excellent\rlap{\checkmark}\fi$\bigcirc$ \hskip 10pt 
+        \ifx\@degree\@excellent\rlap{\checkmark}\fi$\bigcirc$ \hskip 10pt
         بسیار~خوب~%
-        \ifx\@degree\@verygood\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt 
+        \ifx\@degree\@verygood\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt
         خوب~%
-        \ifx\@degree\@good\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt 
+        \ifx\@degree\@good\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt
         قابل~قبول~%
-        \ifx\@degree\@acceptable\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt مورد دفاع قرار گرفت. 
-        
+        \ifx\@degree\@acceptable\rlap{\checkmark}\fi$\bigcirc$\hskip 10pt مورد دفاع قرار گرفت.
+
     \vskip 5pt
     \def\@nextrow{\\[10pt]}
     \begin{tabularx}{\textwidth}{|@{\hskip 3pt}p{4cm}@{\hskip 3pt}|@{\hskip 2pt}c@{\hskip 2pt}|@{}c@{}|@{}X@{}|}
@@ -626,73 +591,73 @@ bookmarksnumbered = true
     \multicolumn{1}{c|}{\titrfont\small سمت} &
     \multicolumn{1}{c|}{\titrfont\small مرتبه علمی}  &
     \multicolumn{1}{c|}{\titrfont\small امضاء}
-     \\[5pt]
+    \\[5pt]
     \toprule\toprule
 %    &&&\\
-    \ifnum\qom@thesis@supervisor>\z@ 
-    \@first@supervisor@name@persian & 
-    \ifcase\qom@thesis@supervisor\or استاد راهنما\or استاد راهنمای اوّل\fi  & 
-     \@first@supervisor@rank@persian & \@nextrow
-    \ifnum\qom@thesis@supervisor=\tw@ 
-    \@second@supervisor@name@persian & 
-    \@too{استاد} \@too{راهنمای}  
-     دوّم  & 
-     \@second@supervisor@rank@persian & \@nextrow\fi
+    \ifnum\qom@thesis@supervisor>\z@
+    \@first@supervisor@name@persian &
+    \ifcase\qom@thesis@supervisor\or استاد راهنما\or استاد راهنمای اوّل\fi  &
+    \@first@supervisor@rank@persian & \@nextrow
+    \ifnum\qom@thesis@supervisor=\tw@
+    \@second@supervisor@name@persian &
+    \@too{استاد} \@too{راهنمای}
+    دوّم  &
+    \@second@supervisor@rank@persian & \@nextrow\fi
     \fi
 
     \ifnum\qom@thesis@advisor>\z@
-    \@first@advisor@name@persian & 
-    \ifcase\qom@thesis@advisor\or{ استاد مشاور}\or{استاد مشاور اوّل}\fi  & 
+    \@first@advisor@name@persian &
+    \ifcase\qom@thesis@advisor\or{ استاد مشاور}\or{استاد مشاور اوّل}\fi  &
     \@first@advisor@rank@persian & \@nextrow
-    \ifnum\qom@thesis@advisor=\tw@ 
+    \ifnum\qom@thesis@advisor=\tw@
     \@second@advisor@name@persian &
-    \@too{استاد} \@too{مشاور}  
-    دوّم &  
+    \@too{استاد} \@too{مشاور}
+    دوّم &
     \@second@advisor@rank@persian &\@nextrow\fi\fi
 
     \ifnum\qom@thesis@referee@enternal>\z@
-    \@first@referee@name  & 
-    \ifcase\qom@thesis@referee@enternal\or{داور داخلی}\or{داور داخلی اوّل}\fi & 
+    \@first@referee@name  &
+    \ifcase\qom@thesis@referee@enternal\or{داور داخلی}\or{داور داخلی اوّل}\fi &
     \@first@referee@rank  &  \@nextrow
-    \ifnum\qom@thesis@referee@enternal=\tw@ 
-    \@second@referee@name & \@too{داور} \@too{داخلی}  
+    \ifnum\qom@thesis@referee@enternal=\tw@
+    \@second@referee@name & \@too{داور} \@too{داخلی}
     دوّم
     &  \@second@referee@rank  & \@nextrow\fi\fi
 
     \ifnum\qom@thesis@referee@external>\z@
     \@first@referee@external@name &
-    \ifcase\qom@thesis@referee@external\or{داور خارجی}\or{داور خارجی اوّل}\fi & 
-     \@first@referee@external@rank &\@nextrow
+    \ifcase\qom@thesis@referee@external\or{داور خارجی}\or{داور خارجی اوّل}\fi &
+    \@first@referee@external@rank &\@nextrow
     \ifnum\qom@thesis@referee@external=\tw@
-     \@second@referee@external@name & \@too{داور} \@too{خارجی}  
-     دوّم 
-     &  \@second@referee@external@rank & \@nextrow\fi\fi
+    \@second@referee@external@name & \@too{داور} \@too{خارجی}
+    دوّم
+    &  \@second@referee@external@rank & \@nextrow\fi\fi
 
-    \ifx\qom@graduate@repsentative@name\undefined\else\qom@graduate@repsentative@name\fi &  
-     \parbox[t]{4.1cm}{\centering استاد ناظر و \par نماینده تحصیلات تکمیلی}
-     & \ifx\qom@graduate@repsentative@rank\undefined\else\qom@graduate@repsentative@rank\fi &
+    \ifx\qom@graduate@repsentative@name\undefined\else\qom@graduate@repsentative@name\fi &
+    \parbox[t]{4.1cm}{\centering استاد ناظر و \par نماینده تحصیلات تکمیلی}
+    & \ifx\qom@graduate@repsentative@rank\undefined\else\qom@graduate@repsentative@rank\fi &
     \\
 %    & نماینده تحصیلات تکمیلی & & \\[5pt]
     \bottomrule
     \end{tabularx}
 
-    \bigskip       
+    \bigskip
 %        \vfill
         \begin{tabularx}{\textwidth}{XX}
             \begin{minipage}{.4\textwidth}
                 \centering
                 معاون آموزشی و پژوهشی دانشکده\\[5pt]
-                نام و امضاء 
+                نام و امضاء
             \end{minipage} &
             \begin{minipage}{.4\textwidth}
                 \centering
                 مدیر آموزش و  تحصیلات تکمیلی \\[5pt]
-                نام و امضاء 
+                نام و امضاء
             \end{minipage}\\
         \end{tabularx}
-        \vfill    
- \thispagestyle{empty}
- }
+        \vfill
+\thispagestyle{empty}
+}
 \end{preamblepage}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\qomtitle}{%
@@ -700,7 +665,7 @@ bookmarksnumbered = true
 \if@qom@draft\else
 \begin{preamblepage}
     \vspace*{\fill}
-    \textcolor{gray}{\hfill\tiny آماده‌ شده توسط کلاس \texttt{thesis-qom}، نسخهٔ \lr{\qom@thesis@version}}
+    \hfill\usebox\qom@thesis@proof@box
 \end{preamblepage}
 \fi
 
@@ -724,12 +689,12 @@ bookmarksnumbered = true
     \begin{titlepage}
     {\zarfont\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo.jpg}\\[-7pt] \bfseries دانشگاه قم}
     \\[-5pt]
-    {\zarfont\fontsize{12}{14}\selectfont\bfseries دانشکده 
+    {\zarfont\fontsize{12}{14}\selectfont\bfseries دانشکده
     \ifx\@faculty\undefined\qom@dotline{علوم ریاضی}\else\@faculty\fi
-    \\[-7pt] 
-    گروه 
+    \\[-7pt]
+    گروه
     \ifx\@department\undefined\qom@dotline{علوم کامپیوتر}\else\@department\fi}
-    \\%[5pt] 
+    \\%[5pt]
     %\par
     %\vspace{.3\baselineskip}
     {\vskip 2ex
@@ -738,7 +703,7 @@ bookmarksnumbered = true
     }
     %\vskip 2ex
 %    \vskip 5pt
-    \centerline{\zarfont\fontsize{12}{14}\selectfont\bfseries  رشته 
+    \centerline{\zarfont\fontsize{12}{14}\selectfont\bfseries  رشته
     {\ifx\@major\undefined\qom@dotline{مهندسی کامپیوتر}\else\bfseries\@major\fi}{}
     \ifx\@field\undefined\else گرایش \@field\fi}
     \vskip 4ex
@@ -746,7 +711,7 @@ bookmarksnumbered = true
     \ifx\@title@persian\undefined\qom@dotlined{9cm}\else\bfseries {\fontsize{22}{24}\selectfont\@title@persian }\fi}
     \baselineskip=1.5cm\par
     \vskip 4ex
-     \baselineskip=1cm
+    \baselineskip=1cm
 
 %    \large
     {\bfseries\ifcase\qom@thesis@supervisor%0
@@ -760,7 +725,7 @@ bookmarksnumbered = true
     \fontsize{12}{14}\selectfont\@first@supervisor@name@persian{} و \@second@supervisor@name@persian
     \fi
     }
-    \par 
+    \par
     {\bfseries\ifcase\qom@thesis@advisor\relax%0
     \ifnum\qom@thesistype=0\titrfont استاد مشاور: \\ \qom@dotlined{5cm} \fi
     \or%1
@@ -779,12 +744,12 @@ bookmarksnumbered = true
     \ifx\@author@persian\undefined\qom@dotlined{4cm}
     \else\fontsize{12}{14}\selectfont\bfseries\@author@persian\fi}
     \par
-    {\bfseries\fontsize{12}{14}\selectfont\zarfont 
+    {\bfseries\fontsize{12}{14}\selectfont\zarfont
     \ifx\@submissiondate\undefined ماه سال\else\@submissiondate\fi}
     \end{titlepage}
-\end{preamblepage}    
+\end{preamblepage}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% برای پروژه کارشناسی نیازی به صفحات زیر نیست. 
+% برای پروژه کارشناسی نیازی به صفحات زیر نیست.
 \if@qom@draft\else
 \ifnum\qom@thesistype<\tw@
 %%%%%%%%%%%%%%% صفحه تأییده داوران
@@ -792,28 +757,28 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%% صفحه تعهدنامه اصالت پایان‌نامه/رساله
 \oathpage%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\fi    
+\fi
 \fi
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%% صفحه تقدیم 
+%%%%%%%%%%%%%%% صفحه تقدیم
 \if@qom@draft\else
 \begin{preamblepage}
     \ifx\@dedicatedto\undefined%
     \else
-        \pagetitle{تقدیم}    
+        \pagetitle{تقدیم}
         {\@dedicatedto}
     \fi
-\end{preamblepage}    
+\end{preamblepage}
 \fi
-%%%%%%%%%%%%%%% صفحه نیایش 
+%%%%%%%%%%%%%%% صفحه نیایش
 \if@qom@draft\else
 \begin{preamblepage}
     \ifx\@praise\undefined%
     \else
-    \pagetitle{نیایش}    
+    \pagetitle{نیایش}
     {\@praise}
     \fi
-\end{preamblepage}    
+\end{preamblepage}
 \fi
 %%%%%%%%%%%%%%% صفحه سپاسگزاری
 \if@qom@draft\else
@@ -843,14 +808,14 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % دستورهایی برای سفارشی کردن صفحات اول فصل‌ها
 \newcommand\mycustomraggedright{%
- \if@RTL\raggedleft%
- \else\raggedright%
- \fi}
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\if@RTL\raggedleft%
+\else\raggedright%
+\fi}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bidi@AfterPackage{xepersian}{%
 \SepMark{-}
 % دستوری برای حذف کلمه «چکیده»
-\renewcommand{\abstractname}{}
+\def\abstractname{}
 % دستوری برای حذف کلمه «abstract»
 %\renewcommand{\latinabstract}{}
 % دستوری برای تغییر نام کلمه «اثبات» به «برهان»
@@ -859,7 +824,7 @@ bookmarksnumbered = true
 \renewcommand{\bibname}{منابع و مآخذ}
 % دستوری برای تعریف واژه‌نامه انگلیسی به فارسی
 \newcommand\persiangloss[2]{#1\dotfill\lr{#2}\\}
-% دستوری برای تعریف واژه‌نامه فارسی به انگلیسی 
+% دستوری برای تعریف واژه‌نامه فارسی به انگلیسی
 \newcommand\englishgloss[2]{#2\dotfill\lr{#1}\\}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% با دستور newtheoremstyle شما می توانید یک استایل جدید برای محیط هایی چون plain، definition‌ و ... تعریف کنید. شکل کلی این دستور به صورت زیر است.
@@ -873,9 +838,9 @@ bookmarksnumbered = true
 %%  {headpunctuation}% punctuation between head and body
 %%  {headspace}% space after theorem head; " " = normal interword space
 %%  {headspec}% Manually specify head
-% % تعریف محیط‌های گوناگون مانند محیط برای قضیه و ... 
-%% theoremstyle = > plain, definition, remark 
-%% با دستور newtheorem یک نوع از استایلی که در بالای آن تعریف شده است ایجاد می کنیم. 
+% % تعریف محیط‌های گوناگون مانند محیط برای قضیه و ...
+%% theoremstyle = > plain, definition, remark
+%% با دستور newtheorem یک نوع از استایلی که در بالای آن تعریف شده است ایجاد می کنیم.
 % تعریف و نحوه ظاهر شدن عنوان قضیه‌ها، تعریف‌ها، مثال‌ها و ...
 \theoremstyle{definition}
 \newtheorem{definition}{تعریف}[chapter]
@@ -903,46 +868,46 @@ bookmarksnumbered = true
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \AtBeginDocument{%
     \def\@makechapterhead#1{%
-      \vspace*{50\p@}%
-      {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi \normalfont
+        \vspace*{50\p@}%
+        {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi \normalfont
         \ifnum \c@secnumdepth >\m@ne
-          \if@mainmatter
-            \huge\bfseries \@chapapp\space 
+            \if@mainmatter
+            \huge\bfseries \@chapapp\space
             \ifappendix \harfi{chapter}\else \expandafter\tartibinumeral\c@chapter\fi
             \par\nobreak
             \vskip 20\p@
-          \fi
+            \fi
         \fi
         \interlinepenalty\@M
         \Huge \bfseries #1\par\nobreak
         \vskip 40\p@
         \nobreak
         \thispagestyle{empty}
-      }}
+        }}
     \def\@makeschapterhead#1{%
-      \vspace*{50\p@}%
-      {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi
+        \vspace*{50\p@}%
+        {\parindent \z@ \if@RTL\raggedleft\else\raggedright\fi
         \normalfont
         \interlinepenalty\@M
         \Huge \bfseries  #1\par\nobreak
         \vskip 40\p@
         \thispagestyle{empty}
-      }}  
-     \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}%\appendices
-     \appendixtrue}
-     %% The followings are hacks for not using \mainmatter macro by users. 
-     %% Sophisticated front matter page-numbering
+    }}
+    \bidi@appto{\appendix}{%\addcontentsline{toc}{chapter}{پیوست‌ها}%\appendices
+    \appendixtrue}
+    %% The followings are hacks for not using \mainmatter macro by users.
+    %% Sophisticated front matter page-numbering
 %      \bidi@preto{\chapter}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi}
 %      \bidi@patchcmd{\@chapter}{\if@mainmatter}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\global\mainmatter\fi\fi\fi\if@mainmatter}{}{}
-      \bidi@patchcmd{\secdef}{\@dblarg}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi\@dblarg}{}{}
-      \bidi@appto{\tableofcontents}{\@qom@preamblefalse}
-      \bidi@appto{\listoffigures}{\@qom@preamblefalse}
-      \bidi@appto{\listoftables}{\@qom@preamblefalse}
-      \bidi@appto{\lstlistoflistings}{\@qom@preamblefalse}
-      \bidi@appto{\listofsymbols}{\@qom@preamblefalse}
-      \bidi@appto{\endacronym}{\@qom@preamblefalse}
-        \setlength{\parindent}{1cm}
-        \setlength{\parskip}{0pt}
+    \bidi@patchcmd{\secdef}{\@dblarg}{\if@qom@preamble\else\ifappendix\else\ifnum\c@chapter=0\mainmatter\fi\fi\fi\@dblarg}{}{}
+    \bidi@appto{\tableofcontents}{\@qom@preamblefalse}
+    \bidi@appto{\listoffigures}{\@qom@preamblefalse}
+    \bidi@appto{\listoftables}{\@qom@preamblefalse}
+    \bidi@appto{\lstlistoflistings}{\@qom@preamblefalse}
+    \bidi@appto{\listofsymbols}{\@qom@preamblefalse}
+    \bidi@appto{\endacronym}{\@qom@preamblefalse}
+    \setlength{\parindent}{1cm}
+    \setlength{\parskip}{0pt}
     %
     %\setlength{\footskip}{
     %\paperheight   -(1in+\voffset+\topmargin+\headheight+\headsep+\textheight)  -1cm
@@ -950,7 +915,7 @@ bookmarksnumbered = true
     \pagenumbering{roman}
     \qomtitle
     \frontmatter
-}
+}%End of AtBeginDocument
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\@part[#1]#2{%
 \ifnum\c@secnumdepth >-2\relax
@@ -962,10 +927,9 @@ bookmarksnumbered = true
 \markboth{}{}%
 {\centering
 \interlinepenalty \@M
-\ifnum \c@secnumdepth >-2\relax
- \huge\bfseries \partname\nobreakspace\thepart
-\par
-\vskip 20\p@
+\ifnum \c@secnumdepth >-2\relax%
+    \huge\bfseries \partname\nobreakspace\thepart
+    \par\vskip 20\p@
 \fi
 \Huge\bfseries #2\par}%
 \@endpart}
@@ -979,7 +943,7 @@ bookmarksnumbered = true
 %\vskip 20\p@
 %\fi
 %\fi
-%\interlinepenalty\@M 
+%\interlinepenalty\@M
 %\Huge \bfseries #1\par\nobreak
 %\vskip 120\p@
 %}}
@@ -1052,13 +1016,13 @@ bookmarksnumbered = true
         \parskip\z@ \@plus .3\p@\relax
         \if@qom@dicentofa%
             \def\qom@dicrow##1##2{\bigskip##1\dotfill\rl{##2}\par}%% en2fa
-        \fi%    
+        \fi%
         \if@qom@dicfatoen%
             \def\qom@dicrow##1##2{\medskip##1\dotfill\dotfill\hbox{\lr{##2}}\par}%% fa2en
         \fi%
         \def\qom@dic@letter@space{\def\qom@dic@letter@space{\bigskip}}%
         \def\qom@dic@letter@title##1{%
-        \qom@dic@letter@space\centerline{\normalfont\textbf{##1}}\nobreak}%   
+        \qom@dic@letter@space\centerline{\normalfont\textbf{##1}}\nobreak}%
         \expandafter\gdef\expandafter\qom@trimtok##1=##2;\relax{\qom@dicrow{##1}{##2}}%
         \gdef\qom@trimmer##1{\expandafter\qom@trimtok ##1;\relax}%
         \catcode\endlinechar=9 %
@@ -1110,23 +1074,23 @@ bookmarksnumbered = true
     \fi
     %%%%%%%%%%%%%%%%%%%%%% Index %%%%%%%%%%%%%%%%%%%%%%%%%
     \if@qom@index
-      \providecommand*\lettergroup[1]{%
-          \par%
+        \providecommand*\lettergroup[1]{%
+            \par%
             \def\qom@lettergroup{#1}%
-             \ifx\qom@lettergroup\qom@Aa%
+            \ifx\qom@lettergroup\qom@Aa%
                 \textbf{آ}%
-             \else%
+            \else%
                 \ifx\qom@lettergroup\qom@He%
                     \textbf{ه‍}%
-                 \else%
+                \else%
                     \textbf{#1}%
                 \fi%
             \fi%
-          \par%
-          \nopagebreak%
-      }%
+            \par%
+            \nopagebreak%
+        }%
         \printindex%
-    \fi    
+    \fi
     %%%%%%%%%%%%%%%%%%%%%% English Abstract %%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{preamblepage}
     \begin{latin}
@@ -1138,9 +1102,9 @@ bookmarksnumbered = true
             \end{abstractcount}
             \vspace*{1cm}\par
             {\noindent {\bfseries Keywords:}
-             \ifx\@keywords@english\undefined\else\@keywords@english{}\fi}
+            \ifx\@keywords@english\undefined\else\@keywords@english{}\fi}
         \fi
-    \end{latin}    
+    \end{latin}
     \end{preamblepage}
     %%%%%%%%%%%%%%%%%%%%%% English Title %%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{preamblepage}
@@ -1148,12 +1112,12 @@ bookmarksnumbered = true
     \begin{latin}
         {\fontsize{12}{14}\selectfont\includegraphics[width=2cm, height=2cm]{logo.jpg}\\ The University of Qom}
         \\[5pt]
-        {\fontsize{12}{14}\selectfont Faculty of 
+        {\fontsize{12}{14}\selectfont Faculty of
         \ifx\@faculty@english\undefined\qom@dotline{Mathematics}\else\@faculty@english\fi
-        \\[5pt] 
-        Department of  
+        \\[5pt]
+        Department of
         \ifx\@department@english\undefined\qom@dotline{Computer Science}\else\@department@english\fi}
-        \\[10pt] 
+        \\[10pt]
         %\par
         %\vspace{.3\baselineskip}
     %    {\vskip 4ex
@@ -1163,8 +1127,8 @@ bookmarksnumbered = true
         %\vskip 2ex
         \vskip 5pt
         \begin{center}
-        {\fontsize{12}{14}\selectfont\bfseries  
-        A Thesis Submitted in Partial Fulfillment of the Requirements for\linebreak the Degree of 
+        {\fontsize{12}{14}\selectfont\bfseries
+        A Thesis Submitted in Partial Fulfillment of the Requirements for\linebreak the Degree of
         \ifcase\qom@thesistype{Doctor of Philosophy}\or{Master of Science}\or{Bachelor of Science}\fi{} in
         {\ifx\@major@english\undefined\qom@dotline{Computer Science}\else\bfseries\@major@english\fi}{}
         }
@@ -1174,30 +1138,30 @@ bookmarksnumbered = true
         \ifx\@title@english\undefined\qom@dotlined{9cm}\else\bfseries {\fontsize{22}{24}\selectfont\@title@english }\fi}
         \baselineskip=1.5cm\par
         \vskip 4ex
-         \baselineskip=.5cm
+        \baselineskip=.5cm
         \large
         {\large\ifcase\qom@thesis@supervisor@english%0
-         \textsf{Supervisor:} \\
-        \qom@dotlined{5cm}
+            \textsf{Supervisor:} \\
+            \qom@dotlined{5cm}
         \or%1
-         \textsf{Supervisor:} \\
-        \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english
+            \textsf{Supervisor:} \\
+            \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english
         \or%2
-         \textsf{Supervisors:} \\
-        \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english{} and \@second@supervisor@name@english
+            \textsf{Supervisors:} \\
+            \bfseries\fontsize{12}{14}\selectfont\@first@supervisor@name@english{} and \@second@supervisor@name@english
         \fi
         }
-        \par 
+        \par
         {\large\ifcase\qom@thesis@advisor@english\relax%0
         \ifnum\qom@thesistype=0 Advisor: \\ \qom@dotlined{5cm} \fi
         \or%1
-        \textsf{Advisor:} \\
-        \bfseries\fontsize{12}{14}\selectfont%
-        \@first@advisor@name@english
+            \textsf{Advisor:} \\
+            \bfseries\fontsize{12}{14}\selectfont%
+            \@first@advisor@name@english
         \or%2
-         \textsf{Advisors:} \\
-        \bfseries\fontsize{12}{14}\selectfont%
-        \@first@advisor@name@english{} and \@second@advisor@name@english
+            \textsf{Advisors:} \\
+            \bfseries\fontsize{12}{14}\selectfont%
+            \@first@advisor@name@english{} and \@second@advisor@name@english
         \fi
         }
         \par
@@ -1206,33 +1170,29 @@ bookmarksnumbered = true
         \ifx\@author@english\undefined\qom@dotlined{4cm}
         \else\fontsize{12}{14}\selectfont\bfseries\@author@english\fi}
         \par
-        {\fontsize{12}{14}\selectfont 
+        {\fontsize{12}{14}\selectfont
         \ifx\@submissiondate@english\undefined Season Year\else\@submissiondate@english\fi}
-    \end{latin}    
+    \end{latin}
         \end{titlepage}
-    \end{preamblepage}    
+    \end{preamblepage}
     %%%%%%%%%%%%%%%%%%% Blank Page %%%%%%%%%%%%%%%%%%%%%%%%%
     \cleardoublepage
     \newpage\null
     \thispagestyle{empty}
-}
-
-\endinput
-
-
-%% 
-%% Copyright © 2017-2018      by Seiied-Mohammad-Javad Razavian
-%% 
+}%End of \AtEndDocument
+%%
+%% Copyright © 2017-2022      by Seiied-Mohammad-Javad Razavian
+%%
 %% Distributable under the LaTeX Project Public License,
 %% version 1.3c or higher (your choice). The latest version of
 %% this license is at: http://www.latex-project.org/lppl.txt
-%% 
+%%
 %% This work is "maintained" (as per LPPL maintenance status)
 %%  by Seiied-Mohammad-Javad Razavian
-%% 
+%%
 %%  It is a based on Tabriz_thesis of Vahid Damanafshan,
 %%    which was based on xepersian-thesis.cls by Vafa Khalighi
 %%   ____________________________________________________________________
 %% Special thanks to Vafa Khalighi for the XePersian Package.
 %% This work is supported by University of Qom.
-%% End of file `thesis-qom.cls'.	
+%% End of file `thesis-qom.cls'.
