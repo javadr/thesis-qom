@@ -34,7 +34,7 @@ ctan: clean
 fonts:
 	# mkjobtexmf --jobname="${ClassName}" --texopt='--shell-escape' --cmd-tex='tex -halt-on-error "${ClassName}"' --exclude-ext aux,log,toc --dest=fonts
 	@mkdir -p fonts
-	@grep -ri defpersianfont | cut -d"{" -f2 | tr -d "}]" | xargs -I {} bash -c 'fc-list | grep -i "{}" | cut -d: -f1' | xargs -I {} bash -c 'cp "{}" fonts'
+	@grep -ri defpersianfont | cut -d"{" -f2 | tr -d "}]" | xargs -I {} bash -c "fc-list | grep -i '{}' | cut -d: -f1" | xargs -I {} bash -c "cp '{}' ./fonts"
 	@zip -r fonts.zip fonts
 	@rm -rf fonts
 
