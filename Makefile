@@ -34,10 +34,10 @@ ctan: clean
 BATCHFILE=InstallFonts.bat
 FONTS=fonts
 .PHONY: fonts
-fonts:
+fonts: clean
 	# mkjobtexmf --jobname="${ClassName}" --texopt='--shell-escape' --cmd-tex='tex -halt-on-error "${ClassName}"' --exclude-ext aux,log,toc --dest=fonts
 	@mkdir -p "${FONTS}"
-	@grep -ri defpersianfont | cut -d"{" -f2 | tr -d "}]" | xargs -I {} bash -c "fc-list | grep -i '{}' | cut -d: -f1" | xargs -I {} bash -c "cp '{}' ./fonts"
+	@grep -ri defpersianfont | cut -d"{" -f2 | tr -d "}]" | xargs -I {} bash -c "fc-list | grep -i '{}' | cut -d: -f1 | grep -v share" | xargs -I {} bash -c "cp '{}' ./fonts"
 	@echo "REM Run this file 'As an Administrator' to copy fonts in Windows fonts directory" > "${BATCHFILE}"
 	@echo "copy %~dp0${FONTS}\*.ttf %windir%\fonts" >> "${BATCHFILE}"
 	@echo "pause" >> "${BATCHFILE}"
